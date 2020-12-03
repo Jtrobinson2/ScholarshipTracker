@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
         scholarshipRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
+//    setup viewmodel
     private void setUpViewModel() {
         scholarshipViewModel = ViewModelProviders.of(this).get(ScholarshipViewModel.class);
         scholarshipViewModel.getAllScholarships().observe(this, scholarships -> adapter.submitList(scholarships));
