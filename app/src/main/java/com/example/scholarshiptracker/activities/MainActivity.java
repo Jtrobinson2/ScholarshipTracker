@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-
+//setup recyclerView helper method
     private void setUpRecyclerView() {
         RecyclerView scholarshipRecyclerView = findViewById(R.id.scholarships_recycler_view);
         adapter = new ScholarshipAdapter(new ScholarshipAdapter.ScholarshipDiff());
