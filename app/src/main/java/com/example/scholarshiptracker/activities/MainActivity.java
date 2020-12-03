@@ -1,6 +1,9 @@
 package com.example.scholarshiptracker.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
@@ -15,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
     private ScholarshipViewModel scholarshipViewModel;
     private ScholarshipAdapter adapter;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,10 +26,19 @@ public class MainActivity extends AppCompatActivity {
 
         setUpRecyclerView();
         setUpViewModel();
+        Button button = findViewById(R.id.button);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, AddScholarshipActivity.class);
+                startActivity(intent);
+
+            }
+        });
 
 
     }
-//setup recyclerView helper method
+
     private void setUpRecyclerView() {
         RecyclerView scholarshipRecyclerView = findViewById(R.id.scholarships_recycler_view);
         adapter = new ScholarshipAdapter(new ScholarshipAdapter.ScholarshipDiff());
@@ -33,10 +46,12 @@ public class MainActivity extends AppCompatActivity {
         scholarshipRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
-//    setup viewmodel
+
     private void setUpViewModel() {
         scholarshipViewModel = ViewModelProviders.of(this).get(ScholarshipViewModel.class);
         scholarshipViewModel.getAllScholarships().observe(this, scholarships -> adapter.submitList(scholarships));
 
     }
+
+
 }

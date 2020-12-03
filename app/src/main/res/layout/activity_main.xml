@@ -6,6 +6,11 @@
     android:layout_height="match_parent"
     tools:context=".activities.MainActivity">
 
+    <Button
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/scholarships_recycler_view" />
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/scholarships_recycler_view"
         android:layout_width="match_parent"

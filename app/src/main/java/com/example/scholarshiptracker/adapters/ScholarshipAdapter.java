@@ -45,7 +45,7 @@ public class ScholarshipAdapter extends ListAdapter<Scholarship, ScholarshipAdap
         }
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView scholarshipAmount;
         private TextView scholarshipName;
         private TextView dateApplied;
@@ -56,8 +56,7 @@ public class ScholarshipAdapter extends ListAdapter<Scholarship, ScholarshipAdap
             scholarshipAmount = itemView.findViewById(R.id.amount_text_view);
             scholarshipName = itemView.findViewById(R.id.scholarship_name_text_view);
             dateApplied = itemView.findViewById(R.id.date_applied_text_view);
-
-
+            itemView.setOnClickListener(this);
         }
 
         public void bind(String name, int amount, String appliedDate) {
@@ -73,5 +72,13 @@ public class ScholarshipAdapter extends ListAdapter<Scholarship, ScholarshipAdap
 
         }
 
+        @Override
+        public void onClick(View view) {
+
+        }
+
+        public interface OnScholarshipListener {
+            public void onScholarshipClicked(Scholarship scholarship);
+        }
     }
 }
