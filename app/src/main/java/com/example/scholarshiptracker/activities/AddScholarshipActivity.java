@@ -1,22 +1,24 @@
 package com.example.scholarshiptracker.activities;
 
 import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.example.scholarshiptracker.R;
+import com.example.scholarshiptracker.database.Scholarship;
 import com.example.scholarshiptracker.viewmodels.ScholarshipViewModel;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Calendar;
 
 public class AddScholarshipActivity extends AppCompatActivity {
+
     private ScholarshipViewModel viewModel;
     private EditText nameEditText;
     private EditText amountEditText;
@@ -29,23 +31,21 @@ public class AddScholarshipActivity extends AppCompatActivity {
 
     private DatePickerDialog.OnDateSetListener dateAppliedListener;
     private DatePickerDialog.OnDateSetListener deadlineListener;
-    private DatePickerDialog.OnDateSetListener announcementListner;
+    private DatePickerDialog.OnDateSetListener announcementListener;
 
-    private String dateApplied;
-    private String deadline;
-    private String announcement;
-
-
+    //    Constants used to identify different dialogs and onDateListeners
     private static final int DATE_PICKER_APPLIED = 0;
     private static final int DATE_PICKER_DEADLINE = 1;
     private static final int DATE_PICKER_ANNOUNCE = 2;
-
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_scholarship);
+
+//        Initializing ViewModel
+        viewModel = ViewModelProviders.of(this).get(ScholarshipViewModel.class);
 
         nameEditText = findViewById(R.id.scholarship_name_edit_text);
         amountEditText = findViewById(R.id.amount_edit_text);
@@ -56,11 +56,22 @@ public class AddScholarshipActivity extends AppCompatActivity {
         otherNotesEditText = findViewById(R.id.other_notes_edit_text);
         submitButton = findViewById(R.id.submit_button);
 
-        dateAppliedEditText.setOnClickListener(view -> {
-            showDatePickerDialog(DATE_PICKER_APPLIED);
-            Toast.makeText(this, "Date applied clicked", Toast.LENGTH_SHORT).show();
+        submitButton.setOnClickListener(view -> {
+            addScholarship();
         });
 
+        /*
+         * When an edit text is clicked a datepicker dialog shows up, the date is then saved as a
+         * string then shown in the edit text
+         * */
+        dateAppliedEditText.setOnClickListener(view -> {
+            showDatePickerDialog(DATE_PICKER_APPLIED);
+        });
+
+        /*
+         * On date listeners triggered after the user chooses a date
+         * the date is saved as a string
+         * */
         dateAppliedListener = (datePicker, year, monthOfYear, dayOfMonth) -> {
             String chosenDate = monthOfYear + 1 + "/" + dayOfMonth + "/" + year;
             dateAppliedEditText.setText(chosenDate);
@@ -69,17 +80,15 @@ public class AddScholarshipActivity extends AppCompatActivity {
 
         announcementEditText.setOnClickListener(view -> {
             showDatePickerDialog(DATE_PICKER_ANNOUNCE);
-            Toast.makeText(this, "announcement clicked", Toast.LENGTH_SHORT).show();
         });
 
-        announcementListner = (DatePicker datePicker, int year, int monthOfYear, int dayOfMonth) -> {
+        announcementListener = (DatePicker datePicker, int year, int monthOfYear, int dayOfMonth) -> {
             String chosenDate = monthOfYear + 1 + "/" + dayOfMonth + "/" + year;
             announcementEditText.setText(chosenDate);
         };
 
         deadlineEditText.setOnClickListener(view -> {
             showDatePickerDialog(DATE_PICKER_DEADLINE);
-            Toast.makeText(this, "deadline clicked", Toast.LENGTH_SHORT).show();
         });
 
         deadlineListener = (DatePicker datePicker, int year, int monthOfYear, int dayOfMonth) -> {
@@ -90,8 +99,10 @@ public class AddScholarshipActivity extends AppCompatActivity {
 
     }
 
-
-
+    /*
+     * This was necessary to have different onDateListers for the different dialogs
+     * Otherwise one OnDatelistener could only update one editText's string
+     * */
     private void showDatePickerDialog(int datePickerID) {
         switch (datePickerID) {
             case DATE_PICKER_APPLIED:
@@ -106,7 +117,7 @@ public class AddScholarshipActivity extends AppCompatActivity {
             case DATE_PICKER_ANNOUNCE:
                 DatePickerDialog dialog = new DatePickerDialog(
                         this,
-                        announcementListner,
+                        announcementListener,
                         Calendar.getInstance().get(Calendar.YEAR),
                         Calendar.getInstance().get(Calendar.MONTH),
                         Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
@@ -121,18 +132,80 @@ public class AddScholarshipActivity extends AppCompatActivity {
                         Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
                 picker.show();
                 break;
-            default:
-                Toast.makeText(this, "Error with Datepicker", Toast.LENGTH_SHORT).show();;
-        }
 
+        }
 
     }
 
-//    @Override
-//    public void onDateSet(DatePicker datePicker, int year, int monthOfYear, int dayOfMonth) {
-//        chosenDate = monthOfYear + 1 + "/" + dayOfMonth + "/" + year;
-//
-//    }
+    private void addScholarship() {
+        String scholarshipName = "";
+        String dateApplied = "";
+        String deadline = "";
+        String announcmentDate = "";
+        int amount = 0;
+        String contactInfo = "";
+        String otherNotes = "";
+        boolean nameEntered = false;
+        boolean amountEntered = false;
+        boolean applied = false;
+        boolean deadlineEntered = false;
 
+        if (nameEditText.getText().toString().isEmpty()) {
+            Toast.makeText(this, "Scholarship needs a name", Toast.LENGTH_SHORT).show();
+        } else {
+            scholarshipName = nameEditText.getText().toString();
+            nameEntered = true;
+        }
+        if (amountEditText.getText().toString().isEmpty()) {
+            Toast.makeText(this, "Scholarship needs an amount", Toast.LENGTH_SHORT).show();
+        } else {
+            amount = Integer.parseInt(amountEditText.getText().toString());
+            amountEntered = true;
+        }
+        if (dateAppliedEditText.getText().toString().isEmpty()) {
+            Toast.makeText(this, "Date applied is required", Toast.LENGTH_SHORT).show();
+        } else {
+            dateApplied = dateAppliedEditText.getText().toString();
+            applied = true;
+        }
+        if (deadlineEditText.getText().toString().isEmpty()) {
+            Toast.makeText(this, "Deadline is required", Toast.LENGTH_SHORT).show();
+        } else {
+            deadline = deadlineEditText.getText().toString();
+            deadlineEntered = true;
+        }
+        if (announcementEditText.getText().toString().isEmpty()) {
+            announcmentDate = "N/A";
+        }
+        else {
+            announcmentDate = announcementEditText.getText().toString();
+        }
+        if (contactInfoEditText.getText().toString().isEmpty()) {
+            contactInfo = "N/A";
+        }
+        else {
+            contactInfo = contactInfoEditText.getText().toString();
+        }
+        if (otherNotesEditText.getText().toString().isEmpty()) {
+            otherNotes = "N/A";
+        }
+        else {
+            otherNotes = otherNotesEditText.getText().toString();
+        }
+
+        if (nameEntered == false || amountEntered == false || applied == false || deadlineEntered == false) {
+            Toast.makeText(this, "All required fields not entered", Toast.LENGTH_LONG).show();
+            Log.d("TAG", "nameEntered= " + nameEntered);
+            Log.d("TAG", "amountEntered= " + amountEntered);
+            Log.d("TAG", "applied= " + applied);
+            Log.d("TAG", "deadlineEntered= " + deadlineEntered);
+
+        } else {
+            Scholarship scholarship = new Scholarship(scholarshipName, amount, dateApplied, deadline, announcmentDate, contactInfo, otherNotes);
+            viewModel.insertScholarship(scholarship);
+            finish();
+        }
+
+    }
 
 }
