@@ -10,6 +10,8 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -221,5 +223,32 @@ public class AddScholarshipActivity extends AppCompatActivity {
         imm.hideSoftInputFromWindow(input.getWindowToken(), 0);
     }
 
+    //    Helper method to show a dialog when the user is about to leave without
+//    finishing editing
+    private void showUnsavedChangedDialog(@NonNull Context context) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setMessage("Are you sure you want to exit?");
+        builder.setTitle("Unsaved Changes");
+        builder.setCancelable(false);
 
+
+        builder.setPositiveButton(
+                "Yes",
+                (dialog, id) -> {
+                    dialog.cancel();
+                    finish();
+                });
+
+        builder.setNegativeButton(
+                "No",
+                (dialog, id) -> dialog.cancel());
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+    @Override
+    public void onBackPressed() {
+        showUnsavedChangedDialog(this);
+    }
 }
