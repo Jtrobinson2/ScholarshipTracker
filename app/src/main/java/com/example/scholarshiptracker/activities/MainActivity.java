@@ -1,7 +1,5 @@
 package com.example.scholarshiptracker.activities;
 
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -80,51 +78,23 @@ public class MainActivity extends AppCompatActivity {
 
                 builder.setPositiveButton(
                         "Yes",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int id) {
-                                scholarshipViewModel.deleteAllScholarships();
-                                Toast.makeText(MainActivity.this, "Scholarships Deleted", Toast.LENGTH_SHORT).show();
-                                dialog.cancel();
-                            }
+                        (dialog, id) -> {
+                            scholarshipViewModel.deleteAllScholarships();
+                            Toast.makeText(MainActivity.this, "Scholarships Deleted", Toast.LENGTH_SHORT).show();
+                            dialog.cancel();
                         });
 
                 builder.setNegativeButton(
                         "No",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        });
+                        (dialog, id) -> dialog.cancel());
 
                 AlertDialog alertDialog = builder.create();
                 alertDialog.show();
-
                 return true;
             }
             default:
                 return super.onOptionsItemSelected(item);
         }
 
-    }
-
-    private void showAlertDialog(Context context) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setMessage("Are you sure you delete all entries?");
-        builder.setTitle("Delete All Scholarships");
-        builder.setCancelable(true);
-        builder.setIcon(R.drawable.ic_baseline_delete_24);
-
-        builder.setPositiveButton(
-                "Yes",
-                (dialog, id) -> dialog.cancel());
-
-        builder.setNegativeButton(
-                "No",
-                (dialog, id) -> dialog.cancel());
-
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
     }
 }

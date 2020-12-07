@@ -1,8 +1,10 @@
 package com.example.scholarshiptracker.activities;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -65,6 +67,8 @@ public class AddScholarshipActivity extends AppCompatActivity {
          * string then shown in the edit text
          * */
         dateAppliedEditText.setOnClickListener(view -> {
+//            hideKeyboard(this);
+            hideSoftKeyboard(dateAppliedEditText);
             showDatePickerDialog(DATE_PICKER_APPLIED);
         });
 
@@ -79,6 +83,8 @@ public class AddScholarshipActivity extends AppCompatActivity {
 
 
         announcementEditText.setOnClickListener(view -> {
+//            hideKeyboard(this);
+            hideSoftKeyboard(dateAppliedEditText);
             showDatePickerDialog(DATE_PICKER_ANNOUNCE);
         });
 
@@ -88,6 +94,8 @@ public class AddScholarshipActivity extends AppCompatActivity {
         };
 
         deadlineEditText.setOnClickListener(view -> {
+//            hideKeyboard(this);
+            hideSoftKeyboard(dateAppliedEditText);
             showDatePickerDialog(DATE_PICKER_DEADLINE);
         });
 
@@ -150,6 +158,7 @@ public class AddScholarshipActivity extends AppCompatActivity {
         boolean applied = false;
         boolean deadlineEntered = false;
 
+//        Checking if all required fields are entered and that the data is valid before insertion
         if (nameEditText.getText().toString().isEmpty()) {
             Toast.makeText(this, "Scholarship needs a name", Toast.LENGTH_SHORT).show();
         } else {
@@ -176,20 +185,17 @@ public class AddScholarshipActivity extends AppCompatActivity {
         }
         if (announcementEditText.getText().toString().isEmpty()) {
             announcmentDate = "N/A";
-        }
-        else {
+        } else {
             announcmentDate = announcementEditText.getText().toString();
         }
         if (contactInfoEditText.getText().toString().isEmpty()) {
             contactInfo = "N/A";
-        }
-        else {
+        } else {
             contactInfo = contactInfoEditText.getText().toString();
         }
         if (otherNotesEditText.getText().toString().isEmpty()) {
             otherNotes = "N/A";
-        }
-        else {
+        } else {
             otherNotes = otherNotesEditText.getText().toString();
         }
 
@@ -207,5 +213,13 @@ public class AddScholarshipActivity extends AppCompatActivity {
         }
 
     }
+
+
+    //Helper method to hide the keyboard when clicking on the date picker edit text
+    protected void hideSoftKeyboard(EditText input) {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(input.getWindowToken(), 0);
+    }
+
 
 }
