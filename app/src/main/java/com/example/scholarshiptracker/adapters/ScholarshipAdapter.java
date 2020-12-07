@@ -16,11 +16,13 @@ import com.example.scholarshiptracker.database.Scholarship;
 
 import java.util.Objects;
 
+/*TODO use an interface to access the scholarship clicked at the position*/
 public class ScholarshipAdapter extends ListAdapter<Scholarship, ScholarshipAdapter.ViewHolder> {
-    
+    private onClickInterface onClickInterface;
 
-    public ScholarshipAdapter(@NonNull DiffUtil.ItemCallback<Scholarship> diffCallback) {
+    public ScholarshipAdapter(@NonNull DiffUtil.ItemCallback<Scholarship> diffCallback, onClickInterface onClickInterface) {
         super(diffCallback);
+        this.onClickInterface = onClickInterface;
     }
 
     @NonNull
@@ -32,7 +34,7 @@ public class ScholarshipAdapter extends ListAdapter<Scholarship, ScholarshipAdap
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Scholarship currentScholarship = getItem(position);
-        holder.bind(currentScholarship.getScholarshipID(), currentScholarship.getScholarshipName(), currentScholarship.getAmount(), currentScholarship.getDateApplied());
+        holder.bind(currentScholarship, currentScholarship.getScholarshipName(), currentScholarship.getAmount(), currentScholarship.getDateApplied(), onClickInterface);
 
     }
 
@@ -56,6 +58,7 @@ public class ScholarshipAdapter extends ListAdapter<Scholarship, ScholarshipAdap
         private ImageButton editButton;
         private ImageButton deleteButton;
 
+
         private ViewHolder(@NonNull View itemView) {
 
             super(itemView);
@@ -68,12 +71,24 @@ public class ScholarshipAdapter extends ListAdapter<Scholarship, ScholarshipAdap
 
         }
 
-        public void bind(int scholarshipID, String name, int amount, String appliedDate) {
+        public void bind(Scholarship currentScholarship, String name, int amount, String appliedDate, ScholarshipAdapter.onClickInterface onClickInterface) {
             scholarshipName.setText(name);
             scholarshipAmount.setText(String.valueOf(amount));
             dateApplied.setText(appliedDate);
+            editButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    onClickInterface.onEditClicked(currentScholarship);
 
+                }
+            });
 
+            deleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    onClickInterface.onDeleteClicked(currentScholarship);
+                }
+            });
 
 
         }
@@ -86,8 +101,11 @@ public class ScholarshipAdapter extends ListAdapter<Scholarship, ScholarshipAdap
         }
 
     }
+
     public interface onClickInterface {
-        void onClicked(int scholarshipID);
+        void onEditClicked(Scholarship scholarship);
+
+        void onDeleteClicked(Scholarship scholarship);
     }
 
 }

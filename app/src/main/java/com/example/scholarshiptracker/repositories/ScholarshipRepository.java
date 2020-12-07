@@ -39,5 +39,9 @@ public class ScholarshipRepository {
         });
     }
 
+    public void deleteScholarshp(Scholarship scholarship) {
+        ScholarshipsDatabase.databaseWriteExecutor.execute(() -> scholarshipDAO.deleteScholarship(scholarship));
+
+    }
 
 }

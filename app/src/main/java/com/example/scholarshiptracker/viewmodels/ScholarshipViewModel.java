@@ -35,4 +35,8 @@ public class ScholarshipViewModel extends AndroidViewModel {
     public void deleteAllScholarships() {
         repository.deleteAllScholarships();
     }
+
+    public void deleteScholarship(Scholarship scholarship) {
+        repository.deleteScholarshp(scholarship);
+    }
 }
