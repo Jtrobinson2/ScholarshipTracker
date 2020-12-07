@@ -31,4 +31,8 @@ public class ScholarshipViewModel extends AndroidViewModel {
     public LiveData<List<Scholarship>> getAllScholarships() {
         return scholarships;
     }
+
+    public void deleteAllScholarships() {
+        repository.deleteAllScholarships();
+    }
 }

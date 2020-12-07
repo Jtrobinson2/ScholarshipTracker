@@ -32,5 +32,12 @@ public class ScholarshipRepository {
 
     }
 
+    public void deleteAllScholarships() {
+
+        ScholarshipsDatabase.databaseWriteExecutor.execute(() -> {
+            scholarshipDAO.deleteAllScholarships();
+        });
+    }
+
 
 }

@@ -3,6 +3,7 @@ package com.example.scholarshiptracker.adapters;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,8 +14,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.scholarshiptracker.R;
 import com.example.scholarshiptracker.database.Scholarship;
 
-public class ScholarshipAdapter extends ListAdapter<Scholarship, ScholarshipAdapter.ViewHolder> {
+import java.util.Objects;
 
+public class ScholarshipAdapter extends ListAdapter<Scholarship, ScholarshipAdapter.ViewHolder> {
+    
 
     public ScholarshipAdapter(@NonNull DiffUtil.ItemCallback<Scholarship> diffCallback) {
         super(diffCallback);
@@ -29,7 +32,8 @@ public class ScholarshipAdapter extends ListAdapter<Scholarship, ScholarshipAdap
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Scholarship currentScholarship = getItem(position);
-        holder.bind(currentScholarship.getScholarshipName(), currentScholarship.getAmount(), currentScholarship.getDateApplied());
+        holder.bind(currentScholarship.getScholarshipID(), currentScholarship.getScholarshipName(), currentScholarship.getAmount(), currentScholarship.getDateApplied());
+
     }
 
     public static class ScholarshipDiff extends DiffUtil.ItemCallback<Scholarship> {
@@ -41,14 +45,16 @@ public class ScholarshipAdapter extends ListAdapter<Scholarship, ScholarshipAdap
 
         @Override
         public boolean areContentsTheSame(@NonNull Scholarship oldItem, @NonNull Scholarship newItem) {
-            return oldItem.getScholarshipName().equals(newItem.getScholarshipName());
+            return Objects.equals(oldItem.getScholarshipID(), newItem.getScholarshipID());
         }
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         private TextView scholarshipAmount;
         private TextView scholarshipName;
         private TextView dateApplied;
+        private ImageButton editButton;
+        private ImageButton deleteButton;
 
         private ViewHolder(@NonNull View itemView) {
 
@@ -56,13 +62,20 @@ public class ScholarshipAdapter extends ListAdapter<Scholarship, ScholarshipAdap
             scholarshipAmount = itemView.findViewById(R.id.amount_text_view);
             scholarshipName = itemView.findViewById(R.id.scholarship_name_text_view);
             dateApplied = itemView.findViewById(R.id.date_applied_text_view);
-            itemView.setOnClickListener(this);
+            editButton = itemView.findViewById(R.id.list_item_edit_button);
+            deleteButton = itemView.findViewById(R.id.list_item_delete_button);
+
+
         }
 
-        public void bind(String name, int amount, String appliedDate) {
+        public void bind(int scholarshipID, String name, int amount, String appliedDate) {
             scholarshipName.setText(name);
             scholarshipAmount.setText(String.valueOf(amount));
             dateApplied.setText(appliedDate);
+
+
+
+
         }
 
         public static ViewHolder create(ViewGroup parent) {
@@ -72,13 +85,9 @@ public class ScholarshipAdapter extends ListAdapter<Scholarship, ScholarshipAdap
 
         }
 
-        @Override
-        public void onClick(View view) {
-
-        }
-
-        public interface OnScholarshipListener {
-            public void onScholarshipClicked(Scholarship scholarship);
-        }
     }
+    public interface onClickInterface {
+        void onClicked(int scholarshipID);
+    }
+
 }
