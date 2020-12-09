@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,9 +20,10 @@ import com.example.scholarshiptracker.R;
 import com.example.scholarshiptracker.adapters.ScholarshipAdapter;
 import com.example.scholarshiptracker.database.Scholarship;
 import com.example.scholarshiptracker.viewmodels.ScholarshipViewModel;
-import com.google.gson.Gson;
 
-public class MainActivity extends AppCompatActivity   {
+import java.util.List;
+
+public class MainActivity extends AppCompatActivity {
     private ScholarshipViewModel scholarshipViewModel;
     private ScholarshipAdapter adapter;
     private ScholarshipAdapter.onClickInterface onClickInterface;
@@ -38,8 +40,6 @@ public class MainActivity extends AppCompatActivity   {
 
         button.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this, AddScholarshipActivity.class);
-            /*Convert the object to GSON send it to the activity*/
-            Gson gson = new Gson();
             startActivity(intent);
 
         });
@@ -49,10 +49,14 @@ public class MainActivity extends AppCompatActivity   {
 
     private void setUpRecyclerView() {
         RecyclerView scholarshipRecyclerView = findViewById(R.id.scholarships_recycler_view);
+
+//        Sending an object using serializable  is slower than parceable but not noticeable here
         adapter = new ScholarshipAdapter(new ScholarshipAdapter.ScholarshipDiff(), new ScholarshipAdapter.onClickInterface() {
             @Override
             public void onEditClicked(Scholarship scholarship) {
-                Gson gson = new Gson();
+                Intent intent = new Intent(MainActivity.this, EditorActivity.class);
+                intent.putExtra("Scholar", scholarship);
+                startActivity(intent);
                 Toast.makeText(MainActivity.this, "edit button clicked", Toast.LENGTH_SHORT).show();
             }
 
@@ -68,7 +72,12 @@ public class MainActivity extends AppCompatActivity   {
 
     private void setUpViewModel() {
         scholarshipViewModel = ViewModelProviders.of(this).get(ScholarshipViewModel.class);
-        scholarshipViewModel.getAllScholarships().observe(this, scholarships -> adapter.submitList(scholarships));
+        scholarshipViewModel.getAllScholarships().observe(this, new Observer<List<Scholarship>>() {
+            @Override
+            public void onChanged(List<Scholarship> scholarships) {
+                adapter.submitList(scholarships);
+            }
+        });
 
     }
 

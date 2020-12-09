@@ -2,7 +2,6 @@ package com.example.scholarshiptracker.viewmodels;
 
 import android.app.Application;
 
-import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
@@ -17,6 +16,7 @@ public class ScholarshipViewModel extends AndroidViewModel {
     private ScholarshipRepository repository;
 
     private LiveData<List<Scholarship>> scholarships;
+
 
     public ScholarshipViewModel(Application application) {
         super(application);
@@ -38,5 +38,10 @@ public class ScholarshipViewModel extends AndroidViewModel {
 
     public void deleteScholarship(Scholarship scholarship) {
         repository.deleteScholarshp(scholarship);
+    }
+
+
+    public void updateScholarship(Scholarship scholarship) {
+        repository.updateScholarship(scholarship);
     }
 }

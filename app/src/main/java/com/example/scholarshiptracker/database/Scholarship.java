@@ -6,8 +6,10 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+import java.io.Serializable;
+//Implements serializable so I can pass objects between activities
 @Entity(tableName = "scholarship_table")
-public class Scholarship {
+public class Scholarship implements Serializable {
 
     @PrimaryKey(autoGenerate = true)
     public int scholarshipID;

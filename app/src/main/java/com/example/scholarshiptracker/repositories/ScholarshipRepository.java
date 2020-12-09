@@ -15,6 +15,7 @@ public class ScholarshipRepository {
     private LiveData<List<Scholarship>> scholarships;
     private ScholarshipsDatabase database;
 
+
     public ScholarshipRepository(Application application) {
         database = ScholarshipsDatabase.getDatabase(application);
         scholarshipDAO = database.scholarshipsDAO();
@@ -42,6 +43,12 @@ public class ScholarshipRepository {
     public void deleteScholarshp(Scholarship scholarship) {
         ScholarshipsDatabase.databaseWriteExecutor.execute(() -> scholarshipDAO.deleteScholarship(scholarship));
 
+    }
+
+
+
+    public void updateScholarship(Scholarship scholarship) {
+        ScholarshipsDatabase.databaseWriteExecutor.execute(() -> scholarshipDAO.updateScholarship(scholarship));
     }
 
 }
