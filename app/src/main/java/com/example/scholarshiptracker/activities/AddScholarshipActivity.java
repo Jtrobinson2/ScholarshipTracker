@@ -58,7 +58,7 @@ public class AddScholarshipActivity extends AppCompatActivity {
         announcementEditText = findViewById(R.id.announcement_edit_text);
         contactInfoEditText = findViewById(R.id.contact_info_edit_text);
         otherNotesEditText = findViewById(R.id.other_notes_edit_text);
-        submitButton = findViewById(R.id.submit_button);
+        submitButton = findViewById(R.id.update_button);
 
         submitButton.setOnClickListener(view -> {
             addScholarship();

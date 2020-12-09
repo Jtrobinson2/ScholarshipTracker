@@ -14,8 +14,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.scholarshiptracker.R;
@@ -39,18 +37,17 @@ public class EditorActivity extends AppCompatActivity {
     private DatePickerDialog.OnDateSetListener dateAppliedListener;
     private DatePickerDialog.OnDateSetListener deadlineListener;
     private DatePickerDialog.OnDateSetListener announcementListener;
+    private Scholarship recievedScholarship;
 
     //    Constants used to identify different dialogs and onDateListeners
     private static final int DATE_PICKER_APPLIED = 0;
     private static final int DATE_PICKER_DEADLINE = 1;
     private static final int DATE_PICKER_ANNOUNCE = 2;
 
-    /*TODO: send object's id to editor activity then get the object from the database and */
-    /*TODO put its fields in the edit text*/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail);
+        setContentView(R.layout.activity_editor);
 
         nameEditText = findViewById(R.id.scholarship_name_edit_text);
         amountEditText = findViewById(R.id.amount_edit_text);
@@ -59,30 +56,30 @@ public class EditorActivity extends AppCompatActivity {
         announcementEditText = findViewById(R.id.announcement_edit_text);
         contactInfoEditText = findViewById(R.id.contact_info_edit_text);
         otherNotesEditText = findViewById(R.id.other_notes_edit_text);
-        submitButton = findViewById(R.id.submit_button);
+        submitButton = findViewById(R.id.update_button);
 
 //        Initializing ViewModel
         viewModel = ViewModelProviders.of(this).get(ScholarshipViewModel.class);
 
 //        Getting scholarshipID passed from MainActivity
-        if(getIntent().getExtras() != null) {
+        if (getIntent().getExtras() != null) {
             Intent intent = getIntent();
-            Scholarship scholarship = (Scholarship) intent.getSerializableExtra("Scholar");
-            nameEditText.setText(scholarship.getScholarshipName());
-            amountEditText.setText(String.valueOf(scholarship.getAmount()));
-            deadlineEditText.setText(scholarship.getApplicationDeadline());
-            dateAppliedEditText.setText(scholarship.getDateApplied());
-            announcementEditText.setText(scholarship.getExpectedResponseDate());
-            contactInfoEditText.setText(scholarship.getContactInfo());
-            otherNotesEditText.setText(scholarship.getOtherNotes());
-        }
-        else {
+            recievedScholarship = (Scholarship) intent.getSerializableExtra("Scholar");
+            nameEditText.setText(recievedScholarship.getScholarshipName());
+            amountEditText.setText(String.valueOf(recievedScholarship.getAmount()));
+            deadlineEditText.setText(recievedScholarship.getApplicationDeadline());
+            dateAppliedEditText.setText(recievedScholarship.getDateApplied());
+            announcementEditText.setText(recievedScholarship.getExpectedResponseDate());
+            contactInfoEditText.setText(recievedScholarship.getContactInfo());
+            otherNotesEditText.setText(recievedScholarship.getOtherNotes());
+            Toast.makeText(this, String.valueOf(recievedScholarship.getScholarshipID()), Toast.LENGTH_LONG).show();
+        } else {
             Toast.makeText(this, "Scholarship Failed to Load", Toast.LENGTH_SHORT).show();
         }
 
 
         submitButton.setOnClickListener(view -> {
-            addScholarship();
+            updateScholarship();
         });
 
         /*
@@ -168,58 +165,44 @@ public class EditorActivity extends AppCompatActivity {
 
     }
 
-    private void addScholarship() {
-        String scholarshipName = "";
-        String dateApplied = "";
-        String deadline = "";
-        String announcmentDate = "";
+    private void updateScholarship() {
+        String scholarshipName = nameEditText.getText().toString();
+        String dateApplied = dateAppliedEditText.getText().toString();
+        String deadline = deadlineEditText.getText().toString();
+        String announcmentDate = announcementEditText.getText().toString();
         int amount = 0;
-        String contactInfo = "";
-        String otherNotes = "";
-        boolean nameEntered = false;
-        boolean amountEntered = false;
-        boolean applied = false;
-        boolean deadlineEntered = false;
+        String contactInfo = contactInfoEditText.getText().toString();
+        String otherNotes = otherNotesEditText.getText().toString();
+
+        boolean nameEntered = true;
+        boolean amountEntered = true;
+        boolean applied = true;
+        boolean deadlineEntered = true;
+
 
 //        Checking if all required fields are entered and that the data is valid before insertion
-        if (nameEditText.getText().toString().isEmpty()) {
+        if (scholarshipName.isEmpty()) {
             Toast.makeText(this, "Scholarship needs a name", Toast.LENGTH_SHORT).show();
+            nameEntered = false;
         } else {
-            scholarshipName = nameEditText.getText().toString();
             nameEntered = true;
         }
         if (amountEditText.getText().toString().isEmpty()) {
             Toast.makeText(this, "Scholarship needs an amount", Toast.LENGTH_SHORT).show();
+            amountEntered = false;
         } else {
             amount = Integer.parseInt(amountEditText.getText().toString());
             amountEntered = true;
         }
-        if (dateAppliedEditText.getText().toString().isEmpty()) {
-            Toast.makeText(this, "Date applied is required", Toast.LENGTH_SHORT).show();
-        } else {
-            dateApplied = dateAppliedEditText.getText().toString();
-            applied = true;
-        }
-        if (deadlineEditText.getText().toString().isEmpty()) {
-            Toast.makeText(this, "Deadline is required", Toast.LENGTH_SHORT).show();
-        } else {
-            deadline = deadlineEditText.getText().toString();
-            deadlineEntered = true;
-        }
-        if (announcementEditText.getText().toString().isEmpty()) {
+
+        if (announcmentDate.isEmpty()) {
             announcmentDate = "N/A";
-        } else {
-            announcmentDate = announcementEditText.getText().toString();
         }
-        if (contactInfoEditText.getText().toString().isEmpty()) {
+        if (contactInfo.isEmpty()) {
             contactInfo = "N/A";
-        } else {
-            contactInfo = contactInfoEditText.getText().toString();
         }
-        if (otherNotesEditText.getText().toString().isEmpty()) {
+        if (otherNotes.isEmpty()) {
             otherNotes = "N/A";
-        } else {
-            otherNotes = otherNotesEditText.getText().toString();
         }
 
         if (nameEntered == false || amountEntered == false || applied == false || deadlineEntered == false) {
@@ -228,13 +211,19 @@ public class EditorActivity extends AppCompatActivity {
             Log.d("TAG", "amountEntered= " + amountEntered);
             Log.d("TAG", "applied= " + applied);
             Log.d("TAG", "deadlineEntered= " + deadlineEntered);
-
         } else {
-            Scholarship scholarship = new Scholarship(scholarshipName, amount, dateApplied, deadline, announcmentDate, contactInfo, otherNotes);
-            viewModel.insertScholarship(scholarship);
+            recievedScholarship.setAmount(amount);
+            recievedScholarship.setScholarshipName(scholarshipName);
+            recievedScholarship.setApplicationDeadline(deadline);
+            recievedScholarship.setDateApplied(dateApplied);
+            recievedScholarship.setContactInfo(contactInfo);
+            recievedScholarship.setExpectedResponseDate(announcmentDate);
+            recievedScholarship.setOtherNotes(otherNotes);
+
+            viewModel.updateScholarship(recievedScholarship);
+            Toast.makeText(this, "Updated Successfully", Toast.LENGTH_SHORT).show();
             finish();
         }
-
     }
 
 
@@ -246,10 +235,10 @@ public class EditorActivity extends AppCompatActivity {
 
     //    Helper method to show a dialog when the user is about to leave without
 //    finishing editing
-    private void showUnsavedChangedDialog(@NonNull Context context) {
+    private void showUnsavedEditsDialog(@NonNull Context context) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setMessage("Are you sure you want to exit?");
-        builder.setTitle("Unsaved Changes");
+        builder.setTitle("Unsaved Edits");
         builder.setCancelable(false);
 
 
@@ -268,8 +257,9 @@ public class EditorActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
+
     @Override
     public void onBackPressed() {
-        showUnsavedChangedDialog(this);
+        showUnsavedEditsDialog(this);
     }
 }

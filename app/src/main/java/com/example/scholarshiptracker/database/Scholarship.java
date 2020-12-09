@@ -66,6 +66,19 @@ public class Scholarship implements Serializable {
         this.contactInfo = contactInfo;
     }
 
+//    This constructor has the ID for update queries
+    @Ignore
+    public Scholarship(int scholarshipID, @NonNull String scholarshipName, int amount, @NonNull String dateApplied, @NonNull String applicationDeadline, String expectedResponseDate, String contactInfo, String otherNotes) {
+        this.scholarshipID = scholarshipID;
+        this.scholarshipName = scholarshipName;
+        this.amount = amount;
+        this.dateApplied = dateApplied;
+        this.applicationDeadline = applicationDeadline;
+        this.expectedResponseDate = expectedResponseDate;
+        this.contactInfo = contactInfo;
+        this.otherNotes = otherNotes;
+    }
+
     @Ignore
     public Scholarship(@NonNull String scholarshipName, int amount, @NonNull String dateApplied, @NonNull String applicationDeadline, String expectedResponseDate, String contactInfo, String otherNotes) {
         this.scholarshipName = scholarshipName;

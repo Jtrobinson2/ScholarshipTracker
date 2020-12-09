@@ -16,7 +16,7 @@ import com.example.scholarshiptracker.database.Scholarship;
 
 import java.util.Objects;
 
-/*TODO use an interface to access the scholarship clicked at the position*/
+
 public class ScholarshipAdapter extends ListAdapter<Scholarship, ScholarshipAdapter.ViewHolder> {
     private onClickInterface onClickInterface;
 

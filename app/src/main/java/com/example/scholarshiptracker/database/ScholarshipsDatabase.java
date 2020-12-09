@@ -15,25 +15,6 @@ import java.util.concurrent.Executors;
 public abstract class ScholarshipsDatabase extends RoomDatabase {
     public abstract ScholarshipsDAO scholarshipsDAO();
 
-    private static RoomDatabase.Callback sRoomDatabaseCallback = new RoomDatabase.Callback() {
-        @Override
-        public void onCreate(@NonNull SupportSQLiteDatabase db) {
-            super.onCreate(db);
-
-            databaseWriteExecutor.execute(() -> {
-                ScholarshipsDAO dao = INSTANCE.scholarshipsDAO();
-                dao.deleteAllScholarships();
-
-                for (int i = 0; i < 10; i++) {
-                    Scholarship scholarship = new Scholarship("Test", 12, "03/2/3223", "03/19/2002");
-                    dao.addScholarship(scholarship);
-                }
-
-            });
-        }
-    };
-
-
     //  volatile guarantees visibility of changes to variables across threads.
     private static volatile ScholarshipsDatabase INSTANCE;
     private static final int NUMBER_OF_THREADS = 4;
@@ -47,7 +28,6 @@ public abstract class ScholarshipsDatabase extends RoomDatabase {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             ScholarshipsDatabase.class, "scholarship_database")
-                            .addCallback(sRoomDatabaseCallback)
                             .build();
 
                 }
@@ -56,5 +36,10 @@ public abstract class ScholarshipsDatabase extends RoomDatabase {
         return INSTANCE;
     }
 }
+//Code for adding dummy scholarships
+//                for (int i = 0; i < 10; i++) {
+//                    Scholarship scholarship = new Scholarship("Test", 12, "03/2/3223", "03/19/2002");
+//                    dao.addScholarship(scholarship);
+//                }
 
 
