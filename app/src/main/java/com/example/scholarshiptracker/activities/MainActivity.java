@@ -20,6 +20,7 @@ import com.example.scholarshiptracker.R;
 import com.example.scholarshiptracker.adapters.ScholarshipAdapter;
 import com.example.scholarshiptracker.database.Scholarship;
 import com.example.scholarshiptracker.viewmodels.ScholarshipViewModel;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 
@@ -36,9 +37,9 @@ public class MainActivity extends AppCompatActivity {
 
         setUpRecyclerView();
         setUpViewModel();
-        Button button = findViewById(R.id.button);
+        FloatingActionButton addScholarshipbutton = findViewById(R.id.add_scholarship_button);
 
-        button.setOnClickListener(view -> {
+        addScholarshipbutton.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this, AddScholarshipActivity.class);
             startActivity(intent);
 
