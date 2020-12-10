@@ -57,12 +57,20 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, EditorActivity.class);
                 intent.putExtra("Scholar", scholarship);
                 startActivity(intent);
-                Toast.makeText(MainActivity.this, "edit button clicked", Toast.LENGTH_SHORT).show();
+
             }
 
             @Override
             public void onDeleteClicked(Scholarship scholarship) {
                 showDeleteScholarshipDialog(scholarship);
+            }
+
+            @Override
+            public void onItemViewClick(Scholarship scholarship) {
+                Intent intent = new Intent(MainActivity.this, DetailActivity.class);
+                intent.putExtra("Scholar", scholarship);
+                startActivity(intent);
+
             }
         });
         scholarshipRecyclerView.setAdapter(adapter);
