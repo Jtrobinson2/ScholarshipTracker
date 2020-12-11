@@ -36,10 +36,5 @@ public abstract class ScholarshipsDatabase extends RoomDatabase {
         return INSTANCE;
     }
 }
-//Code for adding dummy scholarships
-//                for (int i = 0; i < 10; i++) {
-//                    Scholarship scholarship = new Scholarship("Test", 12, "03/2/3223", "03/19/2002");
-//                    dao.addScholarship(scholarship);
-//                }
 
 

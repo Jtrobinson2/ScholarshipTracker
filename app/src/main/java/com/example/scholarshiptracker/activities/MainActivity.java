@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -24,6 +23,17 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 
+/*
+ * TODO: have scholarships added to the list most recent on top
+ *  TODO: after editing a scholarship have the list stay at the position of the edited scholarship
+ *   TODO: make the detail activity look good
+ *    TODO: Choose a color scheme for the app
+ *     TODO: get the proper text sizes use them throughout your app
+ *      TODO: make the button icons on the list items have a transparent backround
+ *     TODO: polish the edit texts and add an info button next to the announcement date field and other notes field
+ *    TODO: Add a scrollbar to they can jump to the top of the list
+ *
+ * */
 public class MainActivity extends AppCompatActivity {
     private ScholarshipViewModel scholarshipViewModel;
     private ScholarshipAdapter adapter;
@@ -126,6 +136,13 @@ public class MainActivity extends AppCompatActivity {
                 alertDialog.show();
                 return true;
             }
+            case (R.id.add_fake_scholarships):
+                for (int i = 0; i < 100; i++) {
+                    Scholarship scholarship = new Scholarship("Test", 12, "03/2/3223", "03/19/2002");
+                    scholarshipViewModel.insertScholarship(scholarship);
+                }
+                return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }
