@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -33,6 +34,7 @@ public class EditorActivity extends AppCompatActivity {
     private EditText contactInfoEditText;
     private EditText otherNotesEditText;
     private Button submitButton;
+    private static int recievedScholarshipPosition = 0;
 
     private DatePickerDialog.OnDateSetListener dateAppliedListener;
     private DatePickerDialog.OnDateSetListener deadlineListener;
@@ -72,7 +74,10 @@ public class EditorActivity extends AppCompatActivity {
             announcementEditText.setText(recievedScholarship.getExpectedResponseDate());
             contactInfoEditText.setText(recievedScholarship.getContactInfo());
             otherNotesEditText.setText(recievedScholarship.getOtherNotes());
-            Toast.makeText(this, String.valueOf(recievedScholarship.getScholarshipID()), Toast.LENGTH_LONG).show();
+
+            recievedScholarshipPosition = intent.getIntExtra("position", 0);
+            Toast.makeText(this, "Position received " + recievedScholarshipPosition, Toast.LENGTH_SHORT).show();
+
         } else {
             Toast.makeText(this, "Scholarship Failed to Load", Toast.LENGTH_SHORT).show();
         }
@@ -222,6 +227,9 @@ public class EditorActivity extends AppCompatActivity {
 
             viewModel.updateScholarship(recievedScholarship);
             Toast.makeText(this, "Updated Successfully", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent();
+            intent.putExtra("updatedPos", recievedScholarshipPosition);
+            setResult(RESULT_OK, intent);
             finish();
         }
     }
@@ -257,6 +265,17 @@ public class EditorActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+
+        return (super.onOptionsItemSelected(item));
+    }
 
     @Override
     public void onBackPressed() {

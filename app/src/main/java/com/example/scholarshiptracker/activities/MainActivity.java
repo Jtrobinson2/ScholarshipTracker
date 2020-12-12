@@ -2,15 +2,17 @@ package com.example.scholarshiptracker.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Parcelable;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,22 +23,28 @@ import com.example.scholarshiptracker.database.Scholarship;
 import com.example.scholarshiptracker.viewmodels.ScholarshipViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.List;
-
 /*
- * TODO: have scholarships added to the list most recent on top
  *  TODO: after editing a scholarship have the list stay at the position of the edited scholarship
  *   TODO: make the detail activity look good
  *    TODO: Choose a color scheme for the app
+ *     TODO: when deleting a list item have the recyclerview stay where it was
  *     TODO: get the proper text sizes use them throughout your app
- *      TODO: make the button icons on the list items have a transparent backround
  *     TODO: polish the edit texts and add an info button next to the announcement date field and other notes field
- *    TODO: Add a scrollbar to they can jump to the top of the list
+ *    TODO: Add a  material scrollbar to they can jump to the top of the list
  *
  * */
+
+
 public class MainActivity extends AppCompatActivity {
+    private static final String LIST_STATE_KEY = "STATE";
     private ScholarshipViewModel scholarshipViewModel;
     private ScholarshipAdapter adapter;
+    private RecyclerView scholarshipRecyclerView;
+    private static final int REQUEST_CODE_EDIT = 1;
+    private Parcelable recyclerViewState;
+    private static final int REQUEST_CODE_ITEM_VIEW = 2;
+    private static final int REQUEST_CODE_ADD = 3;
+    private LinearLayoutManager layoutManager;
     private ScholarshipAdapter.onClickInterface onClickInterface;
 
 
@@ -51,53 +59,59 @@ public class MainActivity extends AppCompatActivity {
 
         addScholarshipbutton.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this, AddScholarshipActivity.class);
-            startActivity(intent);
+            startActivityForResult(intent, REQUEST_CODE_ADD);
 
         });
 
 
     }
 
+
     private void setUpRecyclerView() {
-        RecyclerView scholarshipRecyclerView = findViewById(R.id.scholarships_recycler_view);
+        scholarshipRecyclerView = findViewById(R.id.scholarships_recycler_view);
 
 //        Sending an object using serializable  is slower than parceable but not noticeable here
         adapter = new ScholarshipAdapter(new ScholarshipAdapter.ScholarshipDiff(), new ScholarshipAdapter.onClickInterface() {
             @Override
-            public void onEditClicked(Scholarship scholarship) {
+            public void onEditClicked(Scholarship scholarship, int position) {
                 Intent intent = new Intent(MainActivity.this, EditorActivity.class);
                 intent.putExtra("Scholar", scholarship);
-                startActivity(intent);
+                intent.putExtra("position", position);
+                startActivityForResult(intent, REQUEST_CODE_EDIT);
+
 
             }
 
+
             @Override
-            public void onDeleteClicked(Scholarship scholarship) {
+            public void onDeleteClicked(Scholarship scholarship, int position) {
                 showDeleteScholarshipDialog(scholarship);
             }
 
             @Override
-            public void onItemViewClick(Scholarship scholarship) {
+            public void onItemViewClick(Scholarship scholarship, int position) {
                 Intent intent = new Intent(MainActivity.this, DetailActivity.class);
                 intent.putExtra("Scholar", scholarship);
-                startActivity(intent);
+                intent.putExtra("position", position);
+                startActivityForResult(intent, REQUEST_CODE_ITEM_VIEW);
 
             }
         });
+
+        layoutManager = new LinearLayoutManager(this);
+        layoutManager.setReverseLayout(true);
+        scholarshipRecyclerView.setLayoutManager(layoutManager);
         scholarshipRecyclerView.setAdapter(adapter);
-        scholarshipRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, true));
+        new Handler().postDelayed(() -> scholarshipRecyclerView.scrollToPosition(adapter.getItemCount()-1), 75);
+
+
 
     }
 
 
     private void setUpViewModel() {
         scholarshipViewModel = ViewModelProviders.of(this).get(ScholarshipViewModel.class);
-        scholarshipViewModel.getAllScholarships().observe(this, new Observer<List<Scholarship>>() {
-            @Override
-            public void onChanged(List<Scholarship> scholarships) {
-                adapter.submitList(scholarships);
-            }
-        });
+        scholarshipViewModel.getAllScholarships().observe(this, scholarships -> adapter.submitList(scholarships));
 
     }
 
@@ -108,6 +122,7 @@ public class MainActivity extends AppCompatActivity {
         return true;
 
     }
+
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -138,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
             case (R.id.add_fake_scholarships):
-                for (int i = 0; i < 100; i++) {
+                for (int i = 0; i < 10; i++) {
                     Scholarship scholarship = new Scholarship("Test", 12, "03/2/3223", "03/19/2002");
                     scholarshipViewModel.insertScholarship(scholarship);
                 }
@@ -171,6 +186,33 @@ public class MainActivity extends AppCompatActivity {
 
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            int position = data.getIntExtra("updatedPos", 0);
+            if (requestCode == REQUEST_CODE_EDIT) {
+                Toast.makeText(this, "Position: " + position, Toast.LENGTH_LONG).show();
+
+//                using a delay here because the recyclerview wasn't ready to be scrolled by the time I called scrollToPosition.
+//                Bad solution but the delay is not noticable to users
+                new Handler().postDelayed(() -> scholarshipRecyclerView.scrollToPosition(position), 75);
+            } else if (requestCode == REQUEST_CODE_ITEM_VIEW) {
+
+                Toast.makeText(this, "request code ITEM VIEW", Toast.LENGTH_SHORT).show();
+                new Handler().postDelayed(() -> scholarshipRecyclerView.scrollToPosition(position), 75);
+            } else if (requestCode == REQUEST_CODE_ADD) {
+
+                Toast.makeText(this, "request code Add", Toast.LENGTH_SHORT).show();
+                new Handler().postDelayed(() -> scholarshipRecyclerView.scrollToPosition(adapter.getItemCount()-1), 75);
+            }
+
+
+        }
+
 
     }
 

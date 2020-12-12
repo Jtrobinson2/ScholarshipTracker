@@ -77,11 +77,11 @@ public class ScholarshipAdapter extends ListAdapter<Scholarship, ScholarshipAdap
             dateApplied.setText(appliedDate);
 
             itemView.setOnClickListener(view -> {
-                onClickInterface.onItemViewClick(currentScholarship);
+                onClickInterface.onItemViewClick(currentScholarship, getAdapterPosition());
             });
-            editButton.setOnClickListener(view -> onClickInterface.onEditClicked(currentScholarship));
+            editButton.setOnClickListener(view -> onClickInterface.onEditClicked(currentScholarship, getAdapterPosition()));
 
-            deleteButton.setOnClickListener(view -> onClickInterface.onDeleteClicked(currentScholarship));
+            deleteButton.setOnClickListener(view -> onClickInterface.onDeleteClicked(currentScholarship, getAdapterPosition()));
 
 
         }
@@ -96,11 +96,11 @@ public class ScholarshipAdapter extends ListAdapter<Scholarship, ScholarshipAdap
     }
 
     public interface onClickInterface {
-        void onEditClicked(Scholarship scholarship);
+        void onEditClicked(Scholarship scholarship, int position);
 
-        void onDeleteClicked(Scholarship scholarship);
+        void onDeleteClicked(Scholarship scholarship, int position);
 
-        void onItemViewClick(Scholarship scholarship);
+        void onItemViewClick(Scholarship scholarship, int position);
     }
 
 }

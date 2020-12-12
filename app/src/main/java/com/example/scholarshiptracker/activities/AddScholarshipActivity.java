@@ -2,8 +2,10 @@ package com.example.scholarshiptracker.activities;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -211,6 +213,9 @@ public class AddScholarshipActivity extends AppCompatActivity {
         } else {
             Scholarship scholarship = new Scholarship(scholarshipName, amount, dateApplied, deadline, announcmentDate, contactInfo, otherNotes);
             viewModel.insertScholarship(scholarship);
+            Intent intent = getIntent();
+            intent.putExtra("position", intent.getIntExtra("position",0));
+            setResult(RESULT_OK, intent);
             finish();
         }
 
@@ -247,6 +252,20 @@ public class AddScholarshipActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
+
+
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+
+        return(super.onOptionsItemSelected(item));
+    }
     @Override
     public void onBackPressed() {
         showUnsavedChangedDialog(this);
