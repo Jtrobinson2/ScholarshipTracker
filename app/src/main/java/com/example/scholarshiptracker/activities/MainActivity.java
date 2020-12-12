@@ -85,7 +85,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         scholarshipRecyclerView.setAdapter(adapter);
-        scholarshipRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        scholarshipRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, true));
+
     }
 
 
