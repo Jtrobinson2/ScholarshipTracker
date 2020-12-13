@@ -24,10 +24,11 @@ import com.example.scholarshiptracker.viewmodels.ScholarshipViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 /*
- *  TODO: after editing a scholarship have the list stay at the position of the edited scholarship
+*  TODO: use adapter.setRestorationPolicy to have recyclerview return to clicked list item
+*   TODO: check to see if the app starts at the top of the list when scholarships are added and on initial onCreate
+ *  TODO: after deleting the scholarship make sure it stays in the same position "relatively" after deletion
  *   TODO: make the detail activity look good
  *    TODO: Choose a color scheme for the app
- *     TODO: when deleting a list item have the recyclerview stay where it was
  *     TODO: get the proper text sizes use them throughout your app
  *     TODO: polish the edit texts and add an info button next to the announcement date field and other notes field
  *    TODO: Add a  material scrollbar to they can jump to the top of the list
@@ -204,8 +205,9 @@ public class MainActivity extends AppCompatActivity {
 
                 Toast.makeText(this, "request code ITEM VIEW", Toast.LENGTH_SHORT).show();
                 new Handler().postDelayed(() -> scholarshipRecyclerView.scrollToPosition(position), 75);
-            } else if (requestCode == REQUEST_CODE_ADD) {
-
+            }
+//            When you come back from the add scholarship activity scroll to the top of the list
+            else if (requestCode == REQUEST_CODE_ADD) {
                 Toast.makeText(this, "request code Add", Toast.LENGTH_SHORT).show();
                 new Handler().postDelayed(() -> scholarshipRecyclerView.scrollToPosition(adapter.getItemCount()-1), 75);
             }

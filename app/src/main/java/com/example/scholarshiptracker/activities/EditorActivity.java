@@ -4,7 +4,6 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -186,36 +185,55 @@ public class EditorActivity extends AppCompatActivity {
 
 
 //        Checking if all required fields are entered and that the data is valid before insertion
-        if (scholarshipName.isEmpty()) {
+        if (nameEditText.getText().toString().isEmpty()) {
             Toast.makeText(this, "Scholarship needs a name", Toast.LENGTH_SHORT).show();
             nameEntered = false;
         } else {
-            nameEntered = true;
+            scholarshipName = nameEditText.getText().toString();
         }
         if (amountEditText.getText().toString().isEmpty()) {
             Toast.makeText(this, "Scholarship needs an amount", Toast.LENGTH_SHORT).show();
             amountEntered = false;
-        } else {
+        } else if(!AddScholarshipActivity.isPositiveNumber(amountEditText.getText().toString())) {
+            Toast.makeText(this, "Invalid Amount", Toast.LENGTH_SHORT).show();
+            amountEntered  = false;
+        }
+        else {
             amount = Integer.parseInt(amountEditText.getText().toString());
-            amountEntered = true;
         }
 
-        if (announcmentDate.isEmpty()) {
+
+        if (dateAppliedEditText.getText().toString().isEmpty()) {
+            Toast.makeText(this, "Date applied is required", Toast.LENGTH_SHORT).show();
+            applied = false;
+        } else {
+            dateApplied = dateAppliedEditText.getText().toString();
+        }
+        if (deadlineEditText.getText().toString().isEmpty()) {
+            Toast.makeText(this, "Deadline is required", Toast.LENGTH_SHORT).show();
+            deadlineEntered = false;
+        } else {
+            deadline = deadlineEditText.getText().toString();
+        }
+        if (announcementEditText.getText().toString().isEmpty()) {
             announcmentDate = "N/A";
+        } else {
+            announcmentDate = announcementEditText.getText().toString();
         }
-        if (contactInfo.isEmpty()) {
+        if (contactInfoEditText.getText().toString().isEmpty()) {
             contactInfo = "N/A";
+        } else {
+            contactInfo = contactInfoEditText.getText().toString();
         }
-        if (otherNotes.isEmpty()) {
+        if (otherNotesEditText.getText().toString().isEmpty()) {
             otherNotes = "N/A";
+        } else {
+            otherNotes = otherNotesEditText.getText().toString();
         }
+
 
         if (nameEntered == false || amountEntered == false || applied == false || deadlineEntered == false) {
-            Toast.makeText(this, "All required fields not entered", Toast.LENGTH_LONG).show();
-            Log.d("TAG", "nameEntered= " + nameEntered);
-            Log.d("TAG", "amountEntered= " + amountEntered);
-            Log.d("TAG", "applied= " + applied);
-            Log.d("TAG", "deadlineEntered= " + deadlineEntered);
+            Toast.makeText(this, "All required fields not entered correctly", Toast.LENGTH_LONG).show();
         } else {
             recievedScholarship.setAmount(amount);
             recievedScholarship.setScholarshipName(scholarshipName);

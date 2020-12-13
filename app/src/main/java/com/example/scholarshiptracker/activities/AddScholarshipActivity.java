@@ -4,7 +4,6 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -171,10 +170,15 @@ public class AddScholarshipActivity extends AppCompatActivity {
         }
         if (amountEditText.getText().toString().isEmpty()) {
             Toast.makeText(this, "Scholarship needs an amount", Toast.LENGTH_SHORT).show();
-        } else {
+        } else if(!isPositiveNumber(amountEditText.getText().toString())) {
+            Toast.makeText(this, "Invalid Amount", Toast.LENGTH_SHORT).show();
+        }
+        else {
             amount = Integer.parseInt(amountEditText.getText().toString());
             amountEntered = true;
         }
+
+
         if (dateAppliedEditText.getText().toString().isEmpty()) {
             Toast.makeText(this, "Date applied is required", Toast.LENGTH_SHORT).show();
         } else {
@@ -204,21 +208,14 @@ public class AddScholarshipActivity extends AppCompatActivity {
         }
 
         if (nameEntered == false || amountEntered == false || applied == false || deadlineEntered == false) {
-            Toast.makeText(this, "All required fields not entered", Toast.LENGTH_LONG).show();
-            Log.d("TAG", "nameEntered= " + nameEntered);
-            Log.d("TAG", "amountEntered= " + amountEntered);
-            Log.d("TAG", "applied= " + applied);
-            Log.d("TAG", "deadlineEntered= " + deadlineEntered);
-
+            Toast.makeText(this, "All required fields not entered correctly", Toast.LENGTH_LONG).show();
         } else {
             Scholarship scholarship = new Scholarship(scholarshipName, amount, dateApplied, deadline, announcmentDate, contactInfo, otherNotes);
             viewModel.insertScholarship(scholarship);
             Intent intent = getIntent();
-            intent.putExtra("position", intent.getIntExtra("position",0));
             setResult(RESULT_OK, intent);
             finish();
         }
-
     }
 
 
@@ -253,9 +250,10 @@ public class AddScholarshipActivity extends AppCompatActivity {
     }
 
 
-
-
-
+    /*
+     * On back pressed returns the recyclerview to the list item you were looking at
+     * therefore I want the home button to do the same
+     * */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -264,10 +262,27 @@ public class AddScholarshipActivity extends AppCompatActivity {
                 return true;
         }
 
-        return(super.onOptionsItemSelected(item));
+        return (super.onOptionsItemSelected(item));
     }
+
     @Override
     public void onBackPressed() {
         showUnsavedChangedDialog(this);
+    }
+
+    //  Helper method to determine if a number is positive or an number in the first place
+    public static boolean isPositiveNumber(String input) {
+        try {
+            int integer = Integer.parseInt(input);
+            if (integer <= 0) {
+                return false;
+            } else {
+                return true;
+            }
+        } catch (NumberFormatException ex) {
+            return false;
+        }
+
+
     }
 }
