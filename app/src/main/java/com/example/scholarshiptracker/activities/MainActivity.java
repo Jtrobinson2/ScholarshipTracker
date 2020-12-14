@@ -100,9 +100,10 @@ public class MainActivity extends AppCompatActivity {
         });
 
         layoutManager = new LinearLayoutManager(this);
+        scholarshipRecyclerView.setAdapter(adapter);
+        adapter.setStateRestorationPolicy(RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY);
         layoutManager.setReverseLayout(true);
         scholarshipRecyclerView.setLayoutManager(layoutManager);
-        scholarshipRecyclerView.setAdapter(adapter);
         new Handler().postDelayed(() -> scholarshipRecyclerView.scrollToPosition(adapter.getItemCount()-1), 75);
 
 
@@ -190,30 +191,32 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
-            int position = data.getIntExtra("updatedPos", 0);
-            if (requestCode == REQUEST_CODE_EDIT) {
-                Toast.makeText(this, "Position: " + position, Toast.LENGTH_LONG).show();
-
-//                using a delay here because the recyclerview wasn't ready to be scrolled by the time I called scrollToPosition.
-//                Bad solution but the delay is not noticable to users
-                new Handler().postDelayed(() -> scholarshipRecyclerView.scrollToPosition(position), 75);
-            } else if (requestCode == REQUEST_CODE_ITEM_VIEW) {
-
-                Toast.makeText(this, "request code ITEM VIEW", Toast.LENGTH_SHORT).show();
-                new Handler().postDelayed(() -> scholarshipRecyclerView.scrollToPosition(position), 75);
-            }
-//            When you come back from the add scholarship activity scroll to the top of the list
-            else if (requestCode == REQUEST_CODE_ADD) {
+//        if (resultCode == RESULT_OK) {
+//            int position = data.getIntExtra("updatedPos", 0);
+//            if (requestCode == REQUEST_CODE_EDIT) {
+//                Toast.makeText(this, "Position: " + position, Toast.LENGTH_LONG).show();
+//
+////                using a delay here because the recyclerview wasn't ready to be scrolled by the time I called scrollToPosition.
+////                Bad solution but the delay is not noticable to users
+//                new Handler().postDelayed(() -> scholarshipRecyclerView.scrollToPosition(position), 75);
+//            } else if (requestCode == REQUEST_CODE_ITEM_VIEW) {
+//
+//                Toast.makeText(this, "request code ITEM VIEW", Toast.LENGTH_SHORT).show();
+//                new Handler().postDelayed(() -> scholarshipRecyclerView.scrollToPosition(position), 75);
+//            }
+////            When you come back from the add scholarship activity scroll to the top of the list
+             if (requestCode == REQUEST_CODE_ADD) {
                 Toast.makeText(this, "request code Add", Toast.LENGTH_SHORT).show();
                 new Handler().postDelayed(() -> scholarshipRecyclerView.scrollToPosition(adapter.getItemCount()-1), 75);
             }
 
-
-        }
+//
+//        }
 
 
     }
