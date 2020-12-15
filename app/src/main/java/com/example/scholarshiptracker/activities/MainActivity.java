@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -24,8 +25,8 @@ import com.example.scholarshiptracker.viewmodels.ScholarshipViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 /*
-*  TODO: use adapter.setRestorationPolicy to have recyclerview return to clicked list item
-*   TODO: check to see if the app starts at the top of the list when scholarships are added and on initial onCreate
+ *  TODO: use adapter.setRestorationPolicy to have recyclerview return to clicked list item
+ *   TODO: check to see if the app starts at the top of the list when scholarships are added and on initial onCreate
  *  TODO: after deleting the scholarship make sure it stays in the same position "relatively" after deletion
  *   TODO: make the detail activity look good
  *    TODO: Choose a color scheme for the app
@@ -42,7 +43,8 @@ public class MainActivity extends AppCompatActivity {
     private ScholarshipAdapter adapter;
     private RecyclerView scholarshipRecyclerView;
     private static final int REQUEST_CODE_EDIT = 1;
-    private Parcelable recyclerViewState;
+    private Parcelable savedRecyclerViewState;
+    private static final String RECYCLER_VIEW_STATE_KEY = "KEY";
     private static final int REQUEST_CODE_ITEM_VIEW = 2;
     private static final int REQUEST_CODE_ADD = 3;
     private LinearLayoutManager layoutManager;
@@ -54,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        setUpRecyclerView();
+
         setUpViewModel();
         FloatingActionButton addScholarshipbutton = findViewById(R.id.add_scholarship_button);
 
@@ -101,10 +103,11 @@ public class MainActivity extends AppCompatActivity {
 
         layoutManager = new LinearLayoutManager(this);
         scholarshipRecyclerView.setAdapter(adapter);
+
+//        This doesn't even work for some reason
         adapter.setStateRestorationPolicy(RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY);
         layoutManager.setReverseLayout(true);
         scholarshipRecyclerView.setLayoutManager(layoutManager);
-        new Handler().postDelayed(() -> scholarshipRecyclerView.scrollToPosition(adapter.getItemCount()-1), 75);
 
 
 
@@ -113,7 +116,12 @@ public class MainActivity extends AppCompatActivity {
 
     private void setUpViewModel() {
         scholarshipViewModel = ViewModelProviders.of(this).get(ScholarshipViewModel.class);
-        scholarshipViewModel.getAllScholarships().observe(this, scholarships -> adapter.submitList(scholarships));
+        scholarshipViewModel.getAllScholarships().observe(this, scholarships -> {
+            setUpRecyclerView();
+            adapter.submitList(scholarships);
+            layoutManager.onRestoreInstanceState(savedRecyclerViewState);
+            Log.d("MAIN", "restore instance state in setup viewmodel called ");
+        });
 
     }
 
@@ -191,8 +199,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -210,16 +216,25 @@ public class MainActivity extends AppCompatActivity {
 //                new Handler().postDelayed(() -> scholarshipRecyclerView.scrollToPosition(position), 75);
 //            }
 ////            When you come back from the add scholarship activity scroll to the top of the list
-             if (requestCode == REQUEST_CODE_ADD) {
-                Toast.makeText(this, "request code Add", Toast.LENGTH_SHORT).show();
-                new Handler().postDelayed(() -> scholarshipRecyclerView.scrollToPosition(adapter.getItemCount()-1), 75);
-            }
+        if (requestCode == REQUEST_CODE_ADD) {
+            Toast.makeText(this, "request code Add", Toast.LENGTH_SHORT).show();
+            new Handler().postDelayed(() -> scholarshipRecyclerView.scrollToPosition(adapter.getItemCount() - 1), 75);
+        }
 
 //
-//        }
+//
 
 
     }
 
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        savedRecyclerViewState = layoutManager.onSaveInstanceState();
+        Log.d("TAG", "Instance state saved in onPause");
+    }
 }
+
+
+

@@ -248,7 +248,7 @@ public class EditorActivity extends AppCompatActivity {
             Intent intent = new Intent();
             intent.putExtra("updatedPos", recievedScholarshipPosition);
             setResult(RESULT_OK, intent);
-            super.onBackPressed();
+            finish();
         }
     }
 
