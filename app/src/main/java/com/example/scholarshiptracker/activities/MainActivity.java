@@ -103,10 +103,8 @@ public class MainActivity extends AppCompatActivity {
 
         layoutManager = new LinearLayoutManager(this);
         scholarshipRecyclerView.setAdapter(adapter);
-
-//        This doesn't even work for some reason
-        adapter.setStateRestorationPolicy(RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY);
         layoutManager.setReverseLayout(true);
+        layoutManager.setStackFromEnd(true);
         scholarshipRecyclerView.setLayoutManager(layoutManager);
 
 
@@ -119,6 +117,7 @@ public class MainActivity extends AppCompatActivity {
         scholarshipViewModel.getAllScholarships().observe(this, scholarships -> {
             setUpRecyclerView();
             adapter.submitList(scholarships);
+//            Restore the scroll position when the new data has come into the recyclerview
             layoutManager.onRestoreInstanceState(savedRecyclerViewState);
             Log.d("MAIN", "restore instance state in setup viewmodel called ");
         });
@@ -228,6 +227,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+//    saving the scroll position so when the user return it doesn't just jump to the bottom of the list
     @Override
     protected void onPause() {
         super.onPause();
