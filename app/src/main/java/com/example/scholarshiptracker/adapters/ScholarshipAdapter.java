@@ -4,9 +4,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
@@ -55,8 +57,13 @@ public class ScholarshipAdapter extends ListAdapter<Scholarship, ScholarshipAdap
         private TextView scholarshipAmount;
         private TextView scholarshipName;
         private TextView dateApplied;
+        private TextView scholarshipAmountLabel;
+        private TextView scholarshipNameLabel;
+        private TextView dateAppliedLabel;
+        private ImageView moneyImageView;
         private ImageButton editButton;
         private ImageButton deleteButton;
+        private CardView cardView;
 
 
         private ViewHolder(@NonNull View itemView) {
@@ -67,6 +74,11 @@ public class ScholarshipAdapter extends ListAdapter<Scholarship, ScholarshipAdap
             dateApplied = itemView.findViewById(R.id.date_applied_text_view);
             editButton = itemView.findViewById(R.id.list_item_edit_button);
             deleteButton = itemView.findViewById(R.id.list_item_delete_button);
+            scholarshipAmountLabel = itemView.findViewById(R.id.amount_text_view_label);
+            dateAppliedLabel = itemView.findViewById(R.id.date_applied_text_view_label);
+            scholarshipNameLabel = itemView.findViewById(R.id.scholarship_name_text_view_label);
+            moneyImageView = itemView.findViewById(R.id.list_item_money_image_view);
+            cardView = itemView.findViewById(R.id.list_item_card_view);
 
 
         }
@@ -75,8 +87,9 @@ public class ScholarshipAdapter extends ListAdapter<Scholarship, ScholarshipAdap
             scholarshipName.setText(name);
             scholarshipAmount.setText(String.valueOf(amount));
             dateApplied.setText(appliedDate);
+            moneyImageView.setImageResource(R.drawable.ic_baseline_attach_money_24);
 
-            itemView.setOnClickListener(view -> {
+            cardView.setOnClickListener(view -> {
                 onClickInterface.onItemViewClick(currentScholarship, getAdapterPosition());
             });
             editButton.setOnClickListener(view -> onClickInterface.onEditClicked(currentScholarship, getAdapterPosition()));

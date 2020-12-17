@@ -38,17 +38,14 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 
 public class MainActivity extends AppCompatActivity {
-    private static final String LIST_STATE_KEY = "STATE";
     private ScholarshipViewModel scholarshipViewModel;
     private ScholarshipAdapter adapter;
     private RecyclerView scholarshipRecyclerView;
     private static final int REQUEST_CODE_EDIT = 1;
     private Parcelable savedRecyclerViewState;
-    private static final String RECYCLER_VIEW_STATE_KEY = "KEY";
     private static final int REQUEST_CODE_ITEM_VIEW = 2;
     private static final int REQUEST_CODE_ADD = 3;
     private LinearLayoutManager layoutManager;
-    private ScholarshipAdapter.onClickInterface onClickInterface;
 
 
     @Override
@@ -119,7 +116,6 @@ public class MainActivity extends AppCompatActivity {
             adapter.submitList(scholarships);
 //            Restore the scroll position when the new data has come into the recyclerview
             layoutManager.onRestoreInstanceState(savedRecyclerViewState);
-            Log.d("MAIN", "restore instance state in setup viewmodel called ");
         });
 
     }
@@ -216,7 +212,6 @@ public class MainActivity extends AppCompatActivity {
 //            }
 ////            When you come back from the add scholarship activity scroll to the top of the list
         if (requestCode == REQUEST_CODE_ADD) {
-            Toast.makeText(this, "request code Add", Toast.LENGTH_SHORT).show();
             new Handler().postDelayed(() -> scholarshipRecyclerView.scrollToPosition(adapter.getItemCount() - 1), 75);
         }
 
@@ -232,7 +227,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         savedRecyclerViewState = layoutManager.onSaveInstanceState();
-        Log.d("TAG", "Instance state saved in onPause");
     }
 }
 

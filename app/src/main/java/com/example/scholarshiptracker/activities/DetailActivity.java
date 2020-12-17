@@ -31,8 +31,8 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
 
         nameTextView = findViewById(R.id.name_text_view);
-        amountTextView = findViewById(R.id.amount_text_view);
-        dateAppliedTextView = findViewById(R.id.date_applied_text_view);
+        amountTextView = findViewById(R.id.amount_text_view_label);
+        dateAppliedTextView = findViewById(R.id.date_applied_text_view_label);
         deadlineTextView = findViewById(R.id.application_deadline_text_view);
         announcementTextView = findViewById(R.id.announcement_text_view);
         contactInfoTextView = findViewById(R.id.contact_info_text_view);
