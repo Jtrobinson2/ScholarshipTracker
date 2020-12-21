@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -25,12 +24,24 @@ import com.example.scholarshiptracker.viewmodels.ScholarshipViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 /*
- *   TODO: check to see if the app starts at the top of the list when scholarships are added and on initial onCreate
- *  TODO: after deleting the scholarship make sure it stays in the same position "relatively" after deletion
  *   TODO: make the detail activity look good
  *     TODO: get the proper text sizes use them throughout your app
+ *      TODO: Fix cardview layout make them the same size, and look better
+ *       TODO: Create splashscreen
+ *        TODO: Test app
+ *         TODO: Create app icon
+ *          TODO: Add tutorial screens on first startup
+ *           TODO: make free and paid variants
+ *            TODO: Add list item addition, and deletion animations
+ *             TODO: Translate APP
+ *          TODO: add premium feature to remove ads, and export database to google sheets
  *     TODO: polish the edit texts and add an info button next to the announcement date field and other notes field
  *    TODO: Add a  material scrollbar to they can jump to the top of the list
+ *     TODO: change the amount editText to a currency edit text libary, and store the double to two decimal places
+ *     TODO: add a navigation drawer housing the rate button, go-premium button, about us button, and settings button
+ *      TODO: Add a order by date menu fab, order by amount menu fab, order alpabetically menu fab
+ *       TODO: add a add up all scholarship money fab
+ *       TODO: currently database is cleared when version is updgraded change this for future updates to the app
  *
  * */
 
@@ -101,7 +112,6 @@ public class MainActivity extends AppCompatActivity {
         layoutManager.setReverseLayout(true);
         layoutManager.setStackFromEnd(true);
         scholarshipRecyclerView.setLayoutManager(layoutManager);
-
 
 
     }
@@ -220,7 +230,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-//    saving the scroll position so when the user return it doesn't just jump to the bottom of the list
+    //    saving the scroll position so when the user return it doesn't just jump to the bottom of the list
     @Override
     protected void onPause() {
         super.onPause();

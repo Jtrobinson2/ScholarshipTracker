@@ -20,7 +20,7 @@ public class Scholarship implements Serializable {
 
     @ColumnInfo(name = "amount")
     @NonNull
-    private int amount;
+    private double amount;
 
     @ColumnInfo(name = "date_applied")
     @NonNull
@@ -41,7 +41,7 @@ public class Scholarship implements Serializable {
 
 
     @Ignore
-    public Scholarship(@NonNull String scholarshipName, int amount, @NonNull String dateApplied, @NonNull String applicationDeadline) {
+    public Scholarship(@NonNull String scholarshipName, double amount, @NonNull String dateApplied, @NonNull String applicationDeadline) {
         this.scholarshipName = scholarshipName;
         this.amount = amount;
         this.dateApplied = dateApplied;
@@ -49,7 +49,7 @@ public class Scholarship implements Serializable {
     }
 
     @Ignore
-    public Scholarship(@NonNull String scholarshipName, int amount, @NonNull String dateApplied, @NonNull String applicationDeadline, String expectedResponseDate) {
+    public Scholarship(@NonNull String scholarshipName, double amount, @NonNull String dateApplied, @NonNull String applicationDeadline, String expectedResponseDate) {
         this.scholarshipName = scholarshipName;
         this.amount = amount;
         this.dateApplied = dateApplied;
@@ -57,7 +57,7 @@ public class Scholarship implements Serializable {
         this.expectedResponseDate = expectedResponseDate;
     }
 
-    public Scholarship(@NonNull String scholarshipName, int amount, @NonNull String dateApplied, @NonNull String applicationDeadline, String expectedResponseDate, String contactInfo) {
+    public Scholarship(@NonNull String scholarshipName, double amount, @NonNull String dateApplied, @NonNull String applicationDeadline, String expectedResponseDate, String contactInfo) {
         this.scholarshipName = scholarshipName;
         this.amount = amount;
         this.dateApplied = dateApplied;
@@ -68,7 +68,7 @@ public class Scholarship implements Serializable {
 
 //    This constructor has the ID for update queries
     @Ignore
-    public Scholarship(int scholarshipID, @NonNull String scholarshipName, int amount, @NonNull String dateApplied, @NonNull String applicationDeadline, String expectedResponseDate, String contactInfo, String otherNotes) {
+    public Scholarship(int scholarshipID, @NonNull String scholarshipName, double amount, @NonNull String dateApplied, @NonNull String applicationDeadline, String expectedResponseDate, String contactInfo, String otherNotes) {
         this.scholarshipID = scholarshipID;
         this.scholarshipName = scholarshipName;
         this.amount = amount;
@@ -80,7 +80,7 @@ public class Scholarship implements Serializable {
     }
 
     @Ignore
-    public Scholarship(@NonNull String scholarshipName, int amount, @NonNull String dateApplied, @NonNull String applicationDeadline, String expectedResponseDate, String contactInfo, String otherNotes) {
+    public Scholarship(@NonNull String scholarshipName, double amount, @NonNull String dateApplied, @NonNull String applicationDeadline, String expectedResponseDate, String contactInfo, String otherNotes) {
         this.scholarshipName = scholarshipName;
         this.amount = amount;
         this.dateApplied = dateApplied;
@@ -98,7 +98,7 @@ public class Scholarship implements Serializable {
         this.scholarshipName = scholarshipName;
     }
 
-    public void setAmount(int amount) {
+    public void setAmount(double amount) {
         this.amount = amount;
     }
 
@@ -127,7 +127,7 @@ public class Scholarship implements Serializable {
         return scholarshipName;
     }
 
-    public int getAmount() {
+    public double getAmount() {
         return amount;
     }
 

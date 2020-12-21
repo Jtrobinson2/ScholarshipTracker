@@ -6,12 +6,13 @@ import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {Scholarship.class}, version = 1, exportSchema = false)
+@Database(entities = {Scholarship.class}, version = 2, exportSchema = false)
 public abstract class ScholarshipsDatabase extends RoomDatabase {
     public abstract ScholarshipsDAO scholarshipsDAO();
 
@@ -28,6 +29,8 @@ public abstract class ScholarshipsDatabase extends RoomDatabase {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             ScholarshipsDatabase.class, "scholarship_database")
+//                            Database will be cleared when the version is updated
+                            .fallbackToDestructiveMigration()
                             .build();
 
                 }

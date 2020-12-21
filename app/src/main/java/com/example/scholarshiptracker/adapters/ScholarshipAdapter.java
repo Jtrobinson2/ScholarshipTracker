@@ -83,7 +83,7 @@ public class ScholarshipAdapter extends ListAdapter<Scholarship, ScholarshipAdap
 
         }
 
-        public void bind(Scholarship currentScholarship, String name, int amount, String appliedDate, ScholarshipAdapter.onClickInterface onClickInterface) {
+        public void bind(Scholarship currentScholarship, String name, double amount, String appliedDate, ScholarshipAdapter.onClickInterface onClickInterface) {
             scholarshipName.setText(name);
             scholarshipAmount.setText(String.valueOf(amount));
             dateApplied.setText(appliedDate);

@@ -57,7 +57,7 @@ public class EditorActivity extends AppCompatActivity {
         announcementEditText = findViewById(R.id.announcement_edit_text);
         contactInfoEditText = findViewById(R.id.contact_info_edit_text);
         otherNotesEditText = findViewById(R.id.other_notes_edit_text);
-        submitButton = findViewById(R.id.update_button);
+        submitButton = findViewById(R.id.submit_button);
 
 //        Initializing ViewModel
         viewModel = ViewModelProviders.of(this).get(ScholarshipViewModel.class);
@@ -174,7 +174,7 @@ public class EditorActivity extends AppCompatActivity {
         String dateApplied = dateAppliedEditText.getText().toString();
         String deadline = deadlineEditText.getText().toString();
         String announcmentDate = announcementEditText.getText().toString();
-        int amount = 0;
+        double amount = 0.00;
         String contactInfo = contactInfoEditText.getText().toString();
         String otherNotes = otherNotesEditText.getText().toString();
 
@@ -199,7 +199,7 @@ public class EditorActivity extends AppCompatActivity {
             amountEntered  = false;
         }
         else {
-            amount = Integer.parseInt(amountEditText.getText().toString());
+            amount = Double.parseDouble(amountEditText.getText().toString());
         }
 
 

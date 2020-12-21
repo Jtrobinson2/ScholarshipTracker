@@ -59,7 +59,7 @@ public class AddScholarshipActivity extends AppCompatActivity {
         announcementEditText = findViewById(R.id.announcement_edit_text);
         contactInfoEditText = findViewById(R.id.contact_info_edit_text);
         otherNotesEditText = findViewById(R.id.other_notes_edit_text);
-        submitButton = findViewById(R.id.update_button);
+        submitButton = findViewById(R.id.submit_button);
 
         submitButton.setOnClickListener(view -> {
             addScholarship();
@@ -153,7 +153,7 @@ public class AddScholarshipActivity extends AppCompatActivity {
         String dateApplied = "";
         String deadline = "";
         String announcmentDate = "";
-        int amount = 0;
+        double amount = 0.00;
         String contactInfo = "";
         String otherNotes = "";
         boolean nameEntered = false;
@@ -174,7 +174,7 @@ public class AddScholarshipActivity extends AppCompatActivity {
             Toast.makeText(this, "Invalid Amount", Toast.LENGTH_SHORT).show();
         }
         else {
-            amount = Integer.parseInt(amountEditText.getText().toString());
+            amount = Double.parseDouble(amountEditText.getText().toString());
             amountEntered = true;
         }
 
@@ -273,7 +273,7 @@ public class AddScholarshipActivity extends AppCompatActivity {
     //  Helper method to determine if a number is positive or an number in the first place
     public static boolean isPositiveNumber(String input) {
         try {
-            int integer = Integer.parseInt(input);
+            double integer = Double.parseDouble(input);
             if (integer <= 0) {
                 return false;
             } else {
