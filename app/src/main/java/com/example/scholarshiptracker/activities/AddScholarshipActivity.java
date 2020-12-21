@@ -278,6 +278,7 @@ public class AddScholarshipActivity extends AppCompatActivity {
 
     }
 
+    //Data validation method for edit texts
     private boolean validateScholarshipName() {
         if (nameEditText.getText().toString().isEmpty()) {
             nameTextInputLayout.setError("Scholarship needs a name");
@@ -289,6 +290,7 @@ public class AddScholarshipActivity extends AppCompatActivity {
         }
     }
 
+    //Data validation method for edit texts//Data validation method for edit texts
     private boolean validateScholarshipAmount() {
         if (amountEditText.getText().toString().isEmpty()) {
             amountTextInputLayout.setError("Scholarship needs an amount");
@@ -303,6 +305,7 @@ public class AddScholarshipActivity extends AppCompatActivity {
         }
     }
 
+    //Data validation method for edit texts
     private boolean validateDateApplied() {
         if (dateAppliedEditText.getText().toString().isEmpty()) {
             dateAppliedTextInputLayout.setError("Date applied is required");
@@ -314,6 +317,7 @@ public class AddScholarshipActivity extends AppCompatActivity {
         }
     }
 
+    //Data validation method for edit texts
     private boolean validateDeadlineEntered() {
         if (deadlineEditText.getText().toString().isEmpty()) {
             deadlineTextInputLayout.setError("Deadline is required");

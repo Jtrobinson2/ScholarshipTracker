@@ -215,10 +215,6 @@ public class EditorActivity extends AppCompatActivity {
         }
 
 
-
-
-
-
         if ((!validateScholarshipName() | !validateScholarshipAmount() | !validateDateApplied() | !validateDeadlineEntered())) {
             Toast.makeText(this, "All required fields not entered correctly", Toast.LENGTH_LONG).show();
         } else {
