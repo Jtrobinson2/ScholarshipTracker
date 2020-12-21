@@ -19,6 +19,7 @@ import androidx.lifecycle.ViewModelProviders;
 import com.example.scholarshiptracker.R;
 import com.example.scholarshiptracker.database.Scholarship;
 import com.example.scholarshiptracker.viewmodels.ScholarshipViewModel;
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.Calendar;
 
@@ -33,6 +34,16 @@ public class AddScholarshipActivity extends AppCompatActivity {
     private EditText contactInfoEditText;
     private EditText otherNotesEditText;
     private Button submitButton;
+
+    //    Alt-J to select multiple layouts
+    private TextInputLayout nameTextInputLayout;
+    private TextInputLayout amountTextInputLayout;
+    private TextInputLayout dateAppliedTextInputLayout;
+    private TextInputLayout deadlineTextInputLayout;
+    private TextInputLayout announcementTextInputLayout;
+    private TextInputLayout contactInfoTextInputLayout;
+    private TextInputLayout otherNotesTextInputLayout;
+
 
     private DatePickerDialog.OnDateSetListener dateAppliedListener;
     private DatePickerDialog.OnDateSetListener deadlineListener;
@@ -60,6 +71,15 @@ public class AddScholarshipActivity extends AppCompatActivity {
         contactInfoEditText = findViewById(R.id.contact_info_edit_text);
         otherNotesEditText = findViewById(R.id.other_notes_edit_text);
         submitButton = findViewById(R.id.submit_button);
+
+        nameTextInputLayout = findViewById(R.id.name_input_layout);
+        dateAppliedTextInputLayout = findViewById(R.id.date_applied_input_layout);
+        otherNotesTextInputLayout = findViewById(R.id.other_notes_input_layout);
+        deadlineTextInputLayout = findViewById(R.id.deadline_input_layout);
+        announcementTextInputLayout = findViewById(R.id.announcement_input_layout);
+        contactInfoTextInputLayout = findViewById(R.id.contact_input_layout);
+        amountTextInputLayout = findViewById(R.id.amount_input_layout);
+
 
         submitButton.setOnClickListener(view -> {
             addScholarship();
@@ -156,41 +176,8 @@ public class AddScholarshipActivity extends AppCompatActivity {
         double amount = 0.00;
         String contactInfo = "";
         String otherNotes = "";
-        boolean nameEntered = false;
-        boolean amountEntered = false;
-        boolean applied = false;
-        boolean deadlineEntered = false;
-
-//        Checking if all required fields are entered and that the data is valid before insertion
-        if (nameEditText.getText().toString().isEmpty()) {
-            Toast.makeText(this, "Scholarship needs a name", Toast.LENGTH_SHORT).show();
-        } else {
-            scholarshipName = nameEditText.getText().toString();
-            nameEntered = true;
-        }
-        if (amountEditText.getText().toString().isEmpty()) {
-            Toast.makeText(this, "Scholarship needs an amount", Toast.LENGTH_SHORT).show();
-        } else if(!isPositiveNumber(amountEditText.getText().toString())) {
-            Toast.makeText(this, "Invalid Amount", Toast.LENGTH_SHORT).show();
-        }
-        else {
-            amount = Double.parseDouble(amountEditText.getText().toString());
-            amountEntered = true;
-        }
 
 
-        if (dateAppliedEditText.getText().toString().isEmpty()) {
-            Toast.makeText(this, "Date applied is required", Toast.LENGTH_SHORT).show();
-        } else {
-            dateApplied = dateAppliedEditText.getText().toString();
-            applied = true;
-        }
-        if (deadlineEditText.getText().toString().isEmpty()) {
-            Toast.makeText(this, "Deadline is required", Toast.LENGTH_SHORT).show();
-        } else {
-            deadline = deadlineEditText.getText().toString();
-            deadlineEntered = true;
-        }
         if (announcementEditText.getText().toString().isEmpty()) {
             announcmentDate = "N/A";
         } else {
@@ -207,9 +194,14 @@ public class AddScholarshipActivity extends AppCompatActivity {
             otherNotes = otherNotesEditText.getText().toString();
         }
 
-        if (nameEntered == false || amountEntered == false || applied == false || deadlineEntered == false) {
+        if ((!validateScholarshipName() | !validateScholarshipAmount() | !validateDateApplied() | !validateDeadlineEntered())) {
             Toast.makeText(this, "All required fields not entered correctly", Toast.LENGTH_LONG).show();
         } else {
+            dateApplied = dateAppliedEditText.getText().toString();
+            deadline = deadlineEditText.getText().toString();
+            amount = Double.parseDouble(amountEditText.getText().toString());
+            scholarshipName = nameEditText.getText().toString();
+
             Scholarship scholarship = new Scholarship(scholarshipName, amount, dateApplied, deadline, announcmentDate, contactInfo, otherNotes);
             viewModel.insertScholarship(scholarship);
             Intent intent = getIntent();
@@ -284,5 +276,53 @@ public class AddScholarshipActivity extends AppCompatActivity {
         }
 
 
+    }
+
+    private boolean validateScholarshipName() {
+        if (nameEditText.getText().toString().isEmpty()) {
+            nameTextInputLayout.setError("Scholarship needs a name");
+            return false;
+        } else {
+            nameTextInputLayout.setError(null);
+            nameTextInputLayout.setErrorEnabled(false);
+            return true;
+        }
+    }
+
+    private boolean validateScholarshipAmount() {
+        if (amountEditText.getText().toString().isEmpty()) {
+            amountTextInputLayout.setError("Scholarship needs an amount");
+            return false;
+        } else if (!isPositiveNumber(amountEditText.getText().toString())) {
+            amountTextInputLayout.setError("Lets not go into debt here");
+            return false;
+        } else {
+            amountTextInputLayout.setError(null);
+            amountTextInputLayout.setErrorEnabled(false);
+            return true;
+        }
+    }
+
+    private boolean validateDateApplied() {
+        if (dateAppliedEditText.getText().toString().isEmpty()) {
+            dateAppliedTextInputLayout.setError("Date applied is required");
+            return false;
+        } else {
+            dateAppliedTextInputLayout.setError(null);
+            dateAppliedTextInputLayout.setErrorEnabled(false);
+            return true;
+        }
+    }
+
+    private boolean validateDeadlineEntered() {
+        if (deadlineEditText.getText().toString().isEmpty()) {
+            deadlineTextInputLayout.setError("Deadline is required");
+            return false;
+        } else {
+            deadlineTextInputLayout.setError(null);
+            deadlineTextInputLayout.setErrorEnabled(false);
+            return true;
+
+        }
     }
 }
