@@ -23,11 +23,16 @@ import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.Calendar;
 
+import me.abhinay.input.CurrencyEditText;
+import me.abhinay.input.CurrencySymbols;
+
+import static com.example.scholarshiptracker.activities.AddScholarshipActivity.isPositiveNumber;
+
 public class EditorActivity extends AppCompatActivity {
 
     private ScholarshipViewModel viewModel;
     private EditText nameEditText;
-    private EditText amountEditText;
+    private CurrencyEditText amountEditText;
     private EditText dateAppliedEditText;
     private EditText deadlineEditText;
     private EditText announcementEditText;
@@ -61,7 +66,12 @@ public class EditorActivity extends AppCompatActivity {
         setContentView(R.layout.activity_editor);
 
         nameEditText = findViewById(R.id.scholarship_name_edit_text);
-        amountEditText = findViewById(R.id.amount_edit_text);
+
+        amountEditText = (CurrencyEditText) findViewById(R.id.amount_edit_text);
+        amountEditText.setCurrency(CurrencySymbols.USA);
+        amountEditText.setSpacing(false);
+        amountEditText.setDecimals(true);
+
         dateAppliedEditText = findViewById(R.id.date_applied_edit_text);
         deadlineEditText = findViewById(R.id.application_deadline_edit_text);
         announcementEditText = findViewById(R.id.announcement_edit_text);
@@ -220,7 +230,7 @@ public class EditorActivity extends AppCompatActivity {
         } else {
             dateApplied = dateAppliedEditText.getText().toString();
             deadline = deadlineEditText.getText().toString();
-            amount = Double.parseDouble(amountEditText.getText().toString());
+            amount = amountEditText.getCleanDoubleValue();
             scholarshipName = nameEditText.getText().toString();
 
             recievedScholarship.setAmount(amount);
@@ -302,11 +312,13 @@ public class EditorActivity extends AppCompatActivity {
         }
     }
 
+    //Data validation method for edit texts//Data validation method for edit texts
     private boolean validateScholarshipAmount() {
         if (amountEditText.getText().toString().isEmpty()) {
             amountTextInputLayout.setError("Scholarship needs an amount");
             return false;
-        } else if (!AddScholarshipActivity.isPositiveNumber(amountEditText.getText().toString())) {
+        } else if (!isPositiveNumber(String.valueOf(amountEditText.getCleanDoubleValue()))) {
+            Toast.makeText(this, String.valueOf(amountEditText.getCleanDoubleValue()), Toast.LENGTH_LONG).show();
             amountTextInputLayout.setError("Lets not go into debt here");
             return false;
         } else {

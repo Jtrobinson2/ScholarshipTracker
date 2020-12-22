@@ -41,6 +41,7 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.2.0-beta01'
     testImplementation 'junit:junit:4.12'
     def room_version = "2.2.5"
+    implementation 'me.abhinay.input:currency-edittext:1.1'
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'

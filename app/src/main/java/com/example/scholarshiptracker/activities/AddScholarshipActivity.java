@@ -22,12 +22,17 @@ import com.example.scholarshiptracker.viewmodels.ScholarshipViewModel;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.Calendar;
+import java.util.Currency;
+import java.util.Locale;
+
+import me.abhinay.input.CurrencyEditText;
+import me.abhinay.input.CurrencySymbols;
 
 public class AddScholarshipActivity extends AppCompatActivity {
 
     private ScholarshipViewModel viewModel;
     private EditText nameEditText;
-    private EditText amountEditText;
+    private CurrencyEditText amountEditText;
     private EditText dateAppliedEditText;
     private EditText deadlineEditText;
     private EditText announcementEditText;
@@ -64,7 +69,15 @@ public class AddScholarshipActivity extends AppCompatActivity {
         viewModel = ViewModelProviders.of(this).get(ScholarshipViewModel.class);
 
         nameEditText = findViewById(R.id.scholarship_name_edit_text);
-        amountEditText = findViewById(R.id.amount_edit_text);
+
+
+        amountEditText = (CurrencyEditText) findViewById(R.id.amount_edit_text);
+//        This symbol is only for USA users only haven't figured out how to change it dynamically
+        amountEditText.setCurrency(CurrencySymbols.USA);
+        amountEditText.setSpacing(false);
+        amountEditText.setDecimals(true);
+
+
         dateAppliedEditText = findViewById(R.id.date_applied_edit_text);
         deadlineEditText = findViewById(R.id.application_deadline_edit_text);
         announcementEditText = findViewById(R.id.announcement_edit_text);
@@ -199,7 +212,7 @@ public class AddScholarshipActivity extends AppCompatActivity {
         } else {
             dateApplied = dateAppliedEditText.getText().toString();
             deadline = deadlineEditText.getText().toString();
-            amount = Double.parseDouble(amountEditText.getText().toString());
+            amount = amountEditText.getCleanDoubleValue();
             scholarshipName = nameEditText.getText().toString();
 
             Scholarship scholarship = new Scholarship(scholarshipName, amount, dateApplied, deadline, announcmentDate, contactInfo, otherNotes);
@@ -295,7 +308,8 @@ public class AddScholarshipActivity extends AppCompatActivity {
         if (amountEditText.getText().toString().isEmpty()) {
             amountTextInputLayout.setError("Scholarship needs an amount");
             return false;
-        } else if (!isPositiveNumber(amountEditText.getText().toString())) {
+        } else if (!isPositiveNumber(String.valueOf(amountEditText.getCleanDoubleValue()))) {
+            Toast.makeText(this, String.valueOf(amountEditText.getCleanDoubleValue()) , Toast.LENGTH_LONG).show();
             amountTextInputLayout.setError("Lets not go into debt here");
             return false;
         } else {
