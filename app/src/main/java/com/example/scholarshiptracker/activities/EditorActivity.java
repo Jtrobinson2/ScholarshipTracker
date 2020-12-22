@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -17,10 +18,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.scholarshiptracker.R;
+import com.example.scholarshiptracker.adapters.ScholarshipAdapter;
 import com.example.scholarshiptracker.database.Scholarship;
 import com.example.scholarshiptracker.viewmodels.ScholarshipViewModel;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.text.DecimalFormat;
 import java.util.Calendar;
 
 import me.abhinay.input.CurrencyEditText;
@@ -65,9 +68,11 @@ public class EditorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editor);
 
+
+
         nameEditText = findViewById(R.id.scholarship_name_edit_text);
 
-        amountEditText = (CurrencyEditText) findViewById(R.id.amount_edit_text);
+        amountEditText = findViewById(R.id.amount_edit_text);
         amountEditText.setCurrency(CurrencySymbols.USA);
         amountEditText.setSpacing(false);
         amountEditText.setDecimals(true);
@@ -95,7 +100,7 @@ public class EditorActivity extends AppCompatActivity {
             Intent intent = getIntent();
             recievedScholarship = (Scholarship) intent.getSerializableExtra("Scholar");
             nameEditText.setText(recievedScholarship.getScholarshipName());
-            amountEditText.setText(String.valueOf(recievedScholarship.getAmount()));
+            amountEditText.setText(ScholarshipAdapter.amountPrecision.format(recievedScholarship.getAmount()));
             deadlineEditText.setText(recievedScholarship.getApplicationDeadline());
             dateAppliedEditText.setText(recievedScholarship.getDateApplied());
             announcementEditText.setText(recievedScholarship.getExpectedResponseDate());

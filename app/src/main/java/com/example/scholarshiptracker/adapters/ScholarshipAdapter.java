@@ -16,11 +16,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.scholarshiptracker.R;
 import com.example.scholarshiptracker.database.Scholarship;
 
+import java.text.DecimalFormat;
 import java.util.Objects;
 
 
 public class ScholarshipAdapter extends ListAdapter<Scholarship, ScholarshipAdapter.ViewHolder> {
     private onClickInterface onClickInterface;
+    public static DecimalFormat amountPrecision = new DecimalFormat("0.00");
 
     public ScholarshipAdapter(@NonNull DiffUtil.ItemCallback<Scholarship> diffCallback, onClickInterface onClickInterface) {
         super(diffCallback);
@@ -85,7 +87,8 @@ public class ScholarshipAdapter extends ListAdapter<Scholarship, ScholarshipAdap
 
         public void bind(Scholarship currentScholarship, String name, double amount, String appliedDate, ScholarshipAdapter.onClickInterface onClickInterface) {
             scholarshipName.setText(name);
-            scholarshipAmount.setText(String.valueOf(amount));
+
+            scholarshipAmount.setText(amountPrecision.format(amount));
             dateApplied.setText(appliedDate);
             moneyImageView.setImageResource(R.drawable.ic_baseline_attach_money_24);
 

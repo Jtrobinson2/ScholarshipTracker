@@ -7,6 +7,7 @@ import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
+
 //Implements serializable so I can pass objects between activities
 @Entity(tableName = "scholarship_table")
 public class Scholarship implements Serializable {
@@ -66,7 +67,7 @@ public class Scholarship implements Serializable {
         this.contactInfo = contactInfo;
     }
 
-//    This constructor has the ID for update queries
+    //    This constructor has the ID for update queries
     @Ignore
     public Scholarship(int scholarshipID, @NonNull String scholarshipName, double amount, @NonNull String dateApplied, @NonNull String applicationDeadline, String expectedResponseDate, String contactInfo, String otherNotes) {
         this.scholarshipID = scholarshipID;
