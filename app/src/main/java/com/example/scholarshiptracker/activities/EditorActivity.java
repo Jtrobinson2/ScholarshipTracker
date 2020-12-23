@@ -4,12 +4,12 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -23,7 +23,6 @@ import com.example.scholarshiptracker.database.Scholarship;
 import com.example.scholarshiptracker.viewmodels.ScholarshipViewModel;
 import com.google.android.material.textfield.TextInputLayout;
 
-import java.text.DecimalFormat;
 import java.util.Calendar;
 
 import me.abhinay.input.CurrencyEditText;
@@ -42,6 +41,8 @@ public class EditorActivity extends AppCompatActivity {
     private EditText contactInfoEditText;
     private EditText otherNotesEditText;
     private Button submitButton;
+    private Context context = this;
+    private ImageButton infoButton;
     private static int recievedScholarshipPosition = 0;
 
     //    Alt-J to select multiple layouts
@@ -69,7 +70,6 @@ public class EditorActivity extends AppCompatActivity {
         setContentView(R.layout.activity_editor);
 
 
-
         nameEditText = findViewById(R.id.scholarship_name_edit_text);
 
         amountEditText = findViewById(R.id.amount_edit_text);
@@ -91,6 +91,9 @@ public class EditorActivity extends AppCompatActivity {
         announcementTextInputLayout = findViewById(R.id.announcement_input_layout);
         contactInfoTextInputLayout = findViewById(R.id.contact_input_layout);
         amountTextInputLayout = findViewById(R.id.amount_input_layout);
+
+        infoButton = findViewById(R.id.info_button);
+
 
 //        Initializing ViewModel
         viewModel = ViewModelProviders.of(this).get(ScholarshipViewModel.class);
@@ -115,6 +118,8 @@ public class EditorActivity extends AppCompatActivity {
         }
 
 
+        infoButton.setOnClickListener(view -> AddScholarshipActivity.showAnnounceInfoDialog(context));
+
         submitButton.setOnClickListener(view -> {
             updateScholarship();
         });
@@ -124,7 +129,6 @@ public class EditorActivity extends AppCompatActivity {
          * string then shown in the edit text
          * */
         dateAppliedEditText.setOnClickListener(view -> {
-//            hideKeyboard(this);
             hideSoftKeyboard(dateAppliedEditText);
             showDatePickerDialog(DATE_PICKER_APPLIED);
         });
@@ -140,7 +144,6 @@ public class EditorActivity extends AppCompatActivity {
 
 
         announcementEditText.setOnClickListener(view -> {
-//            hideKeyboard(this);
             hideSoftKeyboard(dateAppliedEditText);
             showDatePickerDialog(DATE_PICKER_ANNOUNCE);
         });
@@ -151,7 +154,6 @@ public class EditorActivity extends AppCompatActivity {
         };
 
         deadlineEditText.setOnClickListener(view -> {
-//            hideKeyboard(this);
             hideSoftKeyboard(dateAppliedEditText);
             showDatePickerDialog(DATE_PICKER_DEADLINE);
         });
@@ -230,7 +232,7 @@ public class EditorActivity extends AppCompatActivity {
         }
 
 
-        if ((!validateScholarshipName() | !validateScholarshipAmount() | !validateDateApplied() | !validateDeadlineEntered())) {
+        if (!validateScholarshipName() | !validateScholarshipAmount() | !validateDateApplied() | !validateDeadlineEntered()) {
             Toast.makeText(this, "All required fields not entered correctly", Toast.LENGTH_LONG).show();
         } else {
             dateApplied = dateAppliedEditText.getText().toString();

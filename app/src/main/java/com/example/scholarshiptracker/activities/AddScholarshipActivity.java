@@ -5,10 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -39,6 +41,7 @@ public class AddScholarshipActivity extends AppCompatActivity {
     private EditText contactInfoEditText;
     private EditText otherNotesEditText;
     private Button submitButton;
+    private ImageButton infoButton;
 
     //    Alt-J to select multiple layouts
     private TextInputLayout nameTextInputLayout;
@@ -71,7 +74,7 @@ public class AddScholarshipActivity extends AppCompatActivity {
         nameEditText = findViewById(R.id.scholarship_name_edit_text);
 
 
-        amountEditText = (CurrencyEditText) findViewById(R.id.amount_edit_text);
+        amountEditText =  findViewById(R.id.amount_edit_text);
 //        This symbol is only for USA users only haven't figured out how to change it dynamically
         amountEditText.setCurrency(CurrencySymbols.USA);
         amountEditText.setSpacing(false);
@@ -83,6 +86,8 @@ public class AddScholarshipActivity extends AppCompatActivity {
         announcementEditText = findViewById(R.id.announcement_edit_text);
         contactInfoEditText = findViewById(R.id.contact_info_edit_text);
         otherNotesEditText = findViewById(R.id.other_notes_edit_text);
+
+        infoButton = findViewById(R.id.info_button);
         submitButton = findViewById(R.id.submit_button);
 
         nameTextInputLayout = findViewById(R.id.name_input_layout);
@@ -93,6 +98,10 @@ public class AddScholarshipActivity extends AppCompatActivity {
         contactInfoTextInputLayout = findViewById(R.id.contact_input_layout);
         amountTextInputLayout = findViewById(R.id.amount_input_layout);
 
+
+        infoButton.setOnClickListener(view -> {
+            showAnnounceInfoDialog(this);
+        });
 
         submitButton.setOnClickListener(view -> {
             addScholarship();
@@ -207,7 +216,7 @@ public class AddScholarshipActivity extends AppCompatActivity {
             otherNotes = otherNotesEditText.getText().toString();
         }
 
-        if ((!validateScholarshipName() | !validateScholarshipAmount() | !validateDateApplied() | !validateDeadlineEntered())) {
+        if (!validateScholarshipName() | !validateScholarshipAmount() | !validateDateApplied() | !validateDeadlineEntered()) {
             Toast.makeText(this, "All required fields not entered correctly", Toast.LENGTH_LONG).show();
         } else {
             dateApplied = dateAppliedEditText.getText().toString();
@@ -342,5 +351,23 @@ public class AddScholarshipActivity extends AppCompatActivity {
             return true;
 
         }
+    }
+
+    public static void showAnnounceInfoDialog(Context context) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setMessage("Announcement date is the day you expect the scholarship to announce the winners");
+        builder.setTitle("Announcement Date");
+        builder.setCancelable(true);
+
+
+        builder.setPositiveButton(
+                "Ok",
+                (dialog, id) -> {
+                    dialog.dismiss();
+
+                });
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 }

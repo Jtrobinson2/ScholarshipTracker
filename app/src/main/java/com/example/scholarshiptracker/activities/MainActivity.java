@@ -29,15 +29,15 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
  *      TODO: Fix cardview layout make them the same size, and look better
  *       TODO: Create splashscreen
  *        TODO: Test app
+ *         TODO: fix announcement date info button placement
  *         TODO: Create app icon
  *          TODO: Add tutorial screens on first startup
  *           TODO: make free and paid variants
  *            TODO: Add list item addition, and deletion animations
  *             TODO: Translate APP
  *          TODO: add premium feature to remove ads, and export database to google sheets
- *     TODO: polish the edit texts and add an info button next to the announcement date field and other notes field
+ *     TODO: polish the edit texts and add an info button next to the announcement date field
  *    TODO: Add a  material scrollbar to they can jump to the top of the list
- *     TODO: change the amount editText to a currency edit text libary, and store the double to two decimal places
  *     TODO: add a navigation drawer housing the rate button, go-premium button, about us button, and settings button
  *      TODO: Add a order by date menu fab, order by amount menu fab, order alpabetically menu fab
  *       TODO: add a add up all scholarship money fab
