@@ -2,22 +2,84 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    >
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/scholarships_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/add_scholarship_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        android:layout_margin="16dp"
-        android:contentDescription="Add Scholarship"
-        android:src="@drawable/ic_baseline_add_24"
-        app:fabSize="normal" />
+    <com.nambimobile.widgets.efab.ExpandableFabLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <!--Portrait fab layout-->
+        <com.nambimobile.widgets.efab.Overlay
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:overlay_orientation="portrait" />
+
+        <com.nambimobile.widgets.efab.ExpandableFab
+            android:id="@+id/expandable_fab_base"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:layout_margin="16dp"
+            app:efab_fabOptionSize="normal"
+            app:efab_firstFabOptionMarginPx="200"
+            app:efab_icon="@drawable/ic_baseline_edit_24"
+            app:efab_orientation="portrait"
+            app:efab_successiveFabOptionMarginPx="200"
+            app:fabSize="normal" />
+
+        <com.nambimobile.widgets.efab.FabOption
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="addScholarship"
+            app:fab_icon="@drawable/ic_plus_white_24dp"
+            app:fab_orientation="portrait"
+            app:label_text="Add Scholarship" />
+
+        <com.nambimobile.widgets.efab.FabOption
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="addScholarshipMoney"
+            app:fab_color="@color/colorAccent"
+            app:fab_icon="@drawable/ic_baseline_attach_money_24"
+            app:fab_orientation="portrait"
+            app:label_text="Total Scholarships" />
+
+        <com.nambimobile.widgets.efab.FabOption
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="orderByDate"
+            app:fab_icon="@drawable/ic_baseline_date_range_24"
+            app:fab_orientation="portrait"
+            app:label_text="Order By Date" />
+
+
+        <com.nambimobile.widgets.efab.FabOption
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="orderByAmount"
+            app:fab_color="@color/colorPrimary"
+            app:fab_icon="@drawable/ic_baseline_format_list_numbered_24"
+            app:fab_orientation="portrait"
+            app:label_text="Order By Amount" />
+
+        <com.nambimobile.widgets.efab.FabOption
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="orderAlphabetically"
+            app:fab_color="@color/colorPrimaryDark"
+            app:fab_icon="@drawable/ic_baseline_sort_by_alpha_24"
+            app:fab_orientation="portrait"
+            app:label_text="Order Alphabetically" />
+
+
+
+    </com.nambimobile.widgets.efab.ExpandableFabLayout>
+
 
 </FrameLayout>
 

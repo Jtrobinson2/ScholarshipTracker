@@ -7,6 +7,7 @@ import android.os.Parcelable;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -25,10 +26,14 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 /*
  *   TODO: make the detail activity look good
+ *    TODO: Add actions to all fab options
+ *    TODO: find colors for all fab options
+ *     TODO: decrease fab opening and closing animation
  *     TODO: get the proper text sizes use them throughout your app
  *      TODO: Fix cardview layout make them the same size, and look better
  *       TODO: Create splashscreen
  *        TODO: Test app
+ *         TODO: make spacing even on editor and add activities
  *         TODO: fix announcement date info button placement
  *         TODO: Create app icon
  *          TODO: Add tutorial screens on first startup
@@ -36,7 +41,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
  *            TODO: Add list item addition, and deletion animations
  *             TODO: Translate APP
  *          TODO: add premium feature to remove ads, and export database to google sheets
- *     TODO: polish the edit texts and add an info button next to the announcement date field
  *    TODO: Add a  material scrollbar to they can jump to the top of the list
  *     TODO: add a navigation drawer housing the rate button, go-premium button, about us button, and settings button
  *      TODO: Add a order by date menu fab, order by amount menu fab, order alpabetically menu fab
@@ -64,11 +68,10 @@ public class MainActivity extends AppCompatActivity {
 
 
         setUpViewModel();
-        FloatingActionButton addScholarshipbutton = findViewById(R.id.add_scholarship_button);
+        FloatingActionButton addScholarshipbutton = findViewById(R.id.expandable_fab_base);
 
         addScholarshipbutton.setOnClickListener(view -> {
-            Intent intent = new Intent(MainActivity.this, AddScholarshipActivity.class);
-            startActivityForResult(intent, REQUEST_CODE_ADD);
+
 
         });
 
@@ -235,6 +238,23 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         savedRecyclerViewState = layoutManager.onSaveInstanceState();
+    }
+
+    public void addScholarshipMoney(View view) {
+    }
+
+    public void orderByDate(View view) {
+    }
+
+    public void orderByAmount(View view) {
+    }
+
+    public void orderAlphabetically(View view) {
+    }
+
+    public void addScholarship(View view) {
+        Intent intent = new Intent(MainActivity.this, AddScholarshipActivity.class);
+        startActivityForResult(intent, REQUEST_CODE_ADD);
     }
 }
 
