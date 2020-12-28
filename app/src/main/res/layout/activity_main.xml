@@ -45,7 +45,7 @@
             android:layout_height="wrap_content"
             android:onClick="addScholarshipMoney"
             app:fab_color="@color/colorAccent"
-            app:fab_icon="@drawable/ic_baseline_attach_money_24"
+            app:fab_icon="@drawable/ic_baseline_attach_money_white24"
             app:fab_orientation="portrait"
             app:label_text="Total Scholarships" />
 

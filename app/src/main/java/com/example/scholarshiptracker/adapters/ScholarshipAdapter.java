@@ -90,7 +90,7 @@ public class ScholarshipAdapter extends ListAdapter<Scholarship, ScholarshipAdap
 
             scholarshipAmount.setText(amountPrecision.format(amount));
             dateApplied.setText(appliedDate);
-            moneyImageView.setImageResource(R.drawable.ic_baseline_attach_money_24);
+            moneyImageView.setImageResource(R.drawable.ic_baseline_attach_money_white24);
 
             cardView.setOnClickListener(view -> {
                 onClickInterface.onItemViewClick(currentScholarship, getAdapterPosition());

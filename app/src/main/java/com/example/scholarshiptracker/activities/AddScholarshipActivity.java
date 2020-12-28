@@ -1,11 +1,12 @@
 package com.example.scholarshiptracker.activities;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -24,9 +25,8 @@ import com.example.scholarshiptracker.viewmodels.ScholarshipViewModel;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.Calendar;
-import java.util.Currency;
-import java.util.Locale;
 
+import de.mateware.snacky.Snacky;
 import me.abhinay.input.CurrencyEditText;
 import me.abhinay.input.CurrencySymbols;
 
@@ -217,7 +217,7 @@ public class AddScholarshipActivity extends AppCompatActivity {
         }
 
         if (!validateScholarshipName() | !validateScholarshipAmount() | !validateDateApplied() | !validateDeadlineEntered()) {
-            Toast.makeText(this, "All required fields not entered correctly", Toast.LENGTH_LONG).show();
+            showErrorSnackbar(this);
         } else {
             dateApplied = dateAppliedEditText.getText().toString();
             deadline = deadlineEditText.getText().toString();
@@ -318,7 +318,6 @@ public class AddScholarshipActivity extends AppCompatActivity {
             amountTextInputLayout.setError("Scholarship needs an amount");
             return false;
         } else if (!isPositiveNumber(String.valueOf(amountEditText.getCleanDoubleValue()))) {
-            Toast.makeText(this, String.valueOf(amountEditText.getCleanDoubleValue()) , Toast.LENGTH_LONG).show();
             amountTextInputLayout.setError("Lets not go into debt here");
             return false;
         } else {
@@ -369,5 +368,47 @@ public class AddScholarshipActivity extends AppCompatActivity {
 
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
+    }
+
+    public static void showErrorSnackbar(Activity activity) {
+        Snacky.builder()
+                .setActivity(activity)
+                .setText("Error")
+                .setDuration(Snacky.LENGTH_SHORT)
+                .error()
+                .show();
+    }
+
+    public static void showUpdatedSuccessSnackbar(Activity activity) {
+        Snacky.builder()
+                .setActivity(activity)
+                .setText("Update Successful")
+                .setIcon(R.drawable.ic_baseline_check_white_24)
+                .setDuration(Snacky.LENGTH_SHORT)
+                .success()
+                .show();
+
+    }
+
+    public static void showAdditionSuccessSnackbar(Activity activity) {
+        Snacky.builder()
+                .setActivity(activity)
+                .setText("Scholarship Added")
+                .setIcon(R.drawable.ic_baseline_attach_money_white24)
+                .setDuration(Snacky.LENGTH_SHORT)
+                .success()
+                .show();
+
+    }
+
+    public static void showDeletionSnackbar(Activity activity) {
+        Snacky.builder()
+                .setActivity(activity)
+                .setText("Deleted Successfully")
+                .setIcon(R.drawable.ic_baseline_delete_white_24)
+                .setDuration(Snacky.LENGTH_SHORT)
+                .error()
+                .show();
+
     }
 }

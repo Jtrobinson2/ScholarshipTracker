@@ -1,5 +1,7 @@
 package com.example.scholarshiptracker.activities;
 
+import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -111,10 +113,9 @@ public class EditorActivity extends AppCompatActivity {
             otherNotesEditText.setText(recievedScholarship.getOtherNotes());
 
             recievedScholarshipPosition = intent.getIntExtra("position", 0);
-            Toast.makeText(this, "Position received " + recievedScholarshipPosition, Toast.LENGTH_SHORT).show();
 
         } else {
-            Toast.makeText(this, "Scholarship Failed to Load", Toast.LENGTH_SHORT).show();
+            AddScholarshipActivity.showErrorSnackbar(this);
         }
 
 
@@ -233,7 +234,7 @@ public class EditorActivity extends AppCompatActivity {
 
 
         if (!validateScholarshipName() | !validateScholarshipAmount() | !validateDateApplied() | !validateDeadlineEntered()) {
-            Toast.makeText(this, "All required fields not entered correctly", Toast.LENGTH_LONG).show();
+            AddScholarshipActivity.showErrorSnackbar(EditorActivity.this);
         } else {
             dateApplied = dateAppliedEditText.getText().toString();
             deadline = deadlineEditText.getText().toString();
@@ -249,7 +250,6 @@ public class EditorActivity extends AppCompatActivity {
             recievedScholarship.setOtherNotes(otherNotes);
 
             viewModel.updateScholarship(recievedScholarship);
-            Toast.makeText(this, "Updated Successfully", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent();
             intent.putExtra("updatedPos", recievedScholarshipPosition);
             setResult(RESULT_OK, intent);
@@ -325,7 +325,6 @@ public class EditorActivity extends AppCompatActivity {
             amountTextInputLayout.setError("Scholarship needs an amount");
             return false;
         } else if (!isPositiveNumber(String.valueOf(amountEditText.getCleanDoubleValue()))) {
-            Toast.makeText(this, String.valueOf(amountEditText.getCleanDoubleValue()), Toast.LENGTH_LONG).show();
             amountTextInputLayout.setError("Lets not go into debt here");
             return false;
         } else {

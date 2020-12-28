@@ -33,18 +33,18 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
  *      TODO: Fix cardview layout make them the same size, and look better
  *       TODO: Create splashscreen
  *        TODO: Test app
+ *         TODO: change toasts to snackbars
  *         TODO: make spacing even on editor and add activities
  *         TODO: fix announcement date info button placement
  *         TODO: Create app icon
  *          TODO: Add tutorial screens on first startup
  *           TODO: make free and paid variants
  *            TODO: Add list item addition, and deletion animations
+ *             TODO: changed edit and delete buttons on list items to options menu housing those actions
  *             TODO: Translate APP
  *          TODO: add premium feature to remove ads, and export database to google sheets
  *    TODO: Add a  material scrollbar to they can jump to the top of the list
  *     TODO: add a navigation drawer housing the rate button, go-premium button, about us button, and settings button
- *      TODO: Add a order by date menu fab, order by amount menu fab, order alpabetically menu fab
- *       TODO: add a add up all scholarship money fab
  *       TODO: currently database is cleared when version is updgraded change this for future updates to the app
  *
  * */
@@ -156,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
                         "Yes",
                         (dialog, id) -> {
                             scholarshipViewModel.deleteAllScholarships();
-                            Toast.makeText(MainActivity.this, "Scholarships Deleted", Toast.LENGTH_SHORT).show();
+                            AddScholarshipActivity.showDeletionSnackbar(this);
                             dialog.cancel();
                         });
 
@@ -192,7 +192,7 @@ public class MainActivity extends AppCompatActivity {
                 "Yes",
                 (dialog, id) -> {
                     scholarshipViewModel.deleteScholarship(scholarship);
-                    Toast.makeText(MainActivity.this, "Scholarship Deleted", Toast.LENGTH_SHORT).show();
+                    AddScholarshipActivity.showDeletionSnackbar(this);
                     dialog.cancel();
                 });
 
@@ -208,26 +208,17 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-//        if (resultCode == RESULT_OK) {
-//            int position = data.getIntExtra("updatedPos", 0);
-//            if (requestCode == REQUEST_CODE_EDIT) {
-//                Toast.makeText(this, "Position: " + position, Toast.LENGTH_LONG).show();
-//
-////                using a delay here because the recyclerview wasn't ready to be scrolled by the time I called scrollToPosition.
-////                Bad solution but the delay is not noticable to users
-//                new Handler().postDelayed(() -> scholarshipRecyclerView.scrollToPosition(position), 75);
-//            } else if (requestCode == REQUEST_CODE_ITEM_VIEW) {
-//
-//                Toast.makeText(this, "request code ITEM VIEW", Toast.LENGTH_SHORT).show();
-//                new Handler().postDelayed(() -> scholarshipRecyclerView.scrollToPosition(position), 75);
-//            }
-////            When you come back from the add scholarship activity scroll to the top of the list
-        if (requestCode == REQUEST_CODE_ADD) {
-            new Handler().postDelayed(() -> scholarshipRecyclerView.scrollToPosition(adapter.getItemCount() - 1), 75);
+        if (resultCode == RESULT_OK) {
+            int position = data.getIntExtra("updatedPos", 0);
+            if (requestCode == REQUEST_CODE_EDIT) {
+                AddScholarshipActivity.showUpdatedSuccessSnackbar(MainActivity.this);
+            }
+//            When you come back from the add scholarship activity scroll to the top of the list
+            else if (requestCode == REQUEST_CODE_ADD) {
+                AddScholarshipActivity.showAdditionSuccessSnackbar(MainActivity.this);
+                new Handler().postDelayed(() -> scholarshipRecyclerView.scrollToPosition(adapter.getItemCount() - 1), 75);
+            }
         }
-
-//
-//
 
 
     }
