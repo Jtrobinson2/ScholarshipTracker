@@ -1,10 +1,12 @@
 package com.example.scholarshiptracker.adapters;
 
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -63,9 +65,8 @@ public class ScholarshipAdapter extends ListAdapter<Scholarship, ScholarshipAdap
         private TextView scholarshipNameLabel;
         private TextView dateAppliedLabel;
         private ImageView moneyImageView;
-        private ImageButton editButton;
-        private ImageButton deleteButton;
         private CardView cardView;
+        private ImageButton popupMenu;
 
 
         private ViewHolder(@NonNull View itemView) {
@@ -74,13 +75,12 @@ public class ScholarshipAdapter extends ListAdapter<Scholarship, ScholarshipAdap
             scholarshipAmount = itemView.findViewById(R.id.amount_text_view);
             scholarshipName = itemView.findViewById(R.id.scholarship_name_text_view);
             dateApplied = itemView.findViewById(R.id.date_applied_text_view);
-            editButton = itemView.findViewById(R.id.list_item_edit_button);
-            deleteButton = itemView.findViewById(R.id.list_item_delete_button);
             scholarshipAmountLabel = itemView.findViewById(R.id.amount_text_view_label);
             dateAppliedLabel = itemView.findViewById(R.id.date_applied_text_view_label);
             scholarshipNameLabel = itemView.findViewById(R.id.scholarship_name_text_view_label);
             moneyImageView = itemView.findViewById(R.id.list_item_money_image_view);
             cardView = itemView.findViewById(R.id.list_item_card_view);
+            popupMenu = itemView.findViewById(R.id.popup_menu_button);
 
 
         }
@@ -92,12 +92,28 @@ public class ScholarshipAdapter extends ListAdapter<Scholarship, ScholarshipAdap
             dateApplied.setText(appliedDate);
             moneyImageView.setImageResource(R.drawable.ic_baseline_attach_money_white24);
 
+            popupMenu.setOnClickListener(view -> {
+                showPopupMenu(view, new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem menuItem) {
+                        switch (menuItem.getItemId()) {
+                            case (R.id.edit_scholarship_menu_item):
+                                onClickInterface.onEditClicked(currentScholarship, getAbsoluteAdapterPosition());
+                                return true;
+                            case (R.id.delete_scholarships_menu_item):
+                                onClickInterface.onDeleteClicked(currentScholarship, getAbsoluteAdapterPosition());
+                                return true;
+                            default:
+                                return false;
+
+                        }
+                    }
+                });
+            });
+
             cardView.setOnClickListener(view -> {
                 onClickInterface.onItemViewClick(currentScholarship, getAdapterPosition());
             });
-            editButton.setOnClickListener(view -> onClickInterface.onEditClicked(currentScholarship, getAdapterPosition()));
-
-            deleteButton.setOnClickListener(view -> onClickInterface.onDeleteClicked(currentScholarship, getAdapterPosition()));
 
 
         }
@@ -109,6 +125,14 @@ public class ScholarshipAdapter extends ListAdapter<Scholarship, ScholarshipAdap
 
         }
 
+        private void showPopupMenu(View view, PopupMenu.OnMenuItemClickListener listener) {
+            PopupMenu popupMenu = new PopupMenu(view.getContext(), view);
+            popupMenu.inflate(R.menu.list_item_popup_menu);
+            popupMenu.setOnMenuItemClickListener(listener);
+            popupMenu.show();
+        }
+
+
     }
 
     public interface onClickInterface {
@@ -118,5 +142,6 @@ public class ScholarshipAdapter extends ListAdapter<Scholarship, ScholarshipAdap
 
         void onItemViewClick(Scholarship scholarship, int position);
     }
+
 
 }

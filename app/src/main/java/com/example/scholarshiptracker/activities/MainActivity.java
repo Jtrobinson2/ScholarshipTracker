@@ -33,7 +33,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
  *      TODO: Fix cardview layout make them the same size, and look better
  *       TODO: Create splashscreen
  *        TODO: Test app
- *         TODO: change toasts to snackbars
  *         TODO: make spacing even on editor and add activities
  *         TODO: fix announcement date info button placement
  *         TODO: Create app icon
