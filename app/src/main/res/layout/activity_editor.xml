@@ -28,7 +28,7 @@
                 android:layout_gravity="center_horizontal"
                 android:ems="10"
                 android:hint="Scholarship Name"
-                android:inputType="text" />
+                android:inputType="textCapSentences" />
 
         </com.google.android.material.textfield.TextInputLayout>
 

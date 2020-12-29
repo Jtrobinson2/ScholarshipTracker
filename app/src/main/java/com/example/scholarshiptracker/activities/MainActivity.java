@@ -35,11 +35,9 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
  *        TODO: Test app
  *         TODO: make spacing even on editor and add activities
  *         TODO: fix announcement date info button placement
- *         TODO: Create app icon
- *          TODO: Add tutorial screens on first startup
+ *         TODO: Create app icoon
  *           TODO: make free and paid variants
  *            TODO: Add list item addition, and deletion animations
- *             TODO: changed edit and delete buttons on list items to options menu housing those actions
  *             TODO: Translate APP
  *          TODO: add premium feature to remove ads, and export database to google sheets
  *    TODO: Add a  material scrollbar to they can jump to the top of the list
