@@ -4,9 +4,7 @@
     android:id="@+id/list_item_parent_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="4dp"
-    android:layout_marginTop="0dp"
-    android:layout_marginRight="4dp">
+>
 
     <androidx.cardview.widget.CardView
         android:id="@+id/list_item_card_view"
@@ -17,14 +15,15 @@
         android:foreground="?android:attr/selectableItemBackground"
         app:cardBackgroundColor="@color/cardview_light_background"
         app:cardCornerRadius="6dp"
-        app:cardElevation="4dp"
+        app:cardMaxElevation="2dp"
         app:cardUseCompatPadding="true"
+        android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="134dp">
+            android:layout_height="wrap_content">
 
 
             <TextView

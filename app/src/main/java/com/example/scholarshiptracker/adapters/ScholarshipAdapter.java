@@ -23,7 +23,7 @@ import java.util.Objects;
 
 public class ScholarshipAdapter extends ListAdapter<Scholarship, ScholarshipAdapter.ViewHolder> {
     private onClickInterface onClickInterface;
-    public static DecimalFormat amountPrecision = new DecimalFormat("###,###,###.00");
+    public static DecimalFormat amountPrecision = new DecimalFormat("###,###,###,###,###,###,###,###,###.00");
 
     public ScholarshipAdapter(@NonNull DiffUtil.ItemCallback<Scholarship> diffCallback, onClickInterface onClickInterface) {
         super(diffCallback);
