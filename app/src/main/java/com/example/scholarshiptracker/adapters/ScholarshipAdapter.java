@@ -23,6 +23,7 @@ import java.util.Objects;
 
 public class ScholarshipAdapter extends ListAdapter<Scholarship, ScholarshipAdapter.ViewHolder> {
     private onClickInterface onClickInterface;
+//    Decimal format has absurd number of placeholders so that trolls won't break the precision by adding too much
     public static DecimalFormat amountPrecision = new DecimalFormat("###,###,###,###,###,###,###,###,###.00");
 
     public ScholarshipAdapter(@NonNull DiffUtil.ItemCallback<Scholarship> diffCallback, onClickInterface onClickInterface) {

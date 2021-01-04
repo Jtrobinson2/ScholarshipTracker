@@ -1,10 +1,10 @@
 package com.example.scholarshiptracker.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
-import android.os.SystemClock;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -22,24 +22,21 @@ import com.example.scholarshiptracker.R;
 import com.example.scholarshiptracker.adapters.ScholarshipAdapter;
 import com.example.scholarshiptracker.database.Scholarship;
 import com.example.scholarshiptracker.viewmodels.ScholarshipViewModel;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.nambimobile.widgets.efab.ExpandableFab;
 
 /*
  *   TODO: make the detail activity look good
  *    TODO: Add actions to all fab options
- *     TODO: decrease fab opening and closing animation
  *     TODO: get the proper text sizes use them throughout your app
- *      TODO: Fix cardview layout make them the same size, and look better
+ *      TODO: add icons to cardview depending on dollar amount
  *       TODO: Create splashscreen
  *        TODO: Test app
  *         TODO: make spacing even on editor and add activities
- *         TODO: fix announcement date info button placement
  *         TODO: Create app icoon
  *           TODO: make free and paid variants
  *            TODO: Add list item addition, and deletion animations
  *             TODO: Translate APP
  *          TODO: add premium feature to remove ads, and export database to google sheets
- *    TODO: Add a  material scrollbar to they can jump to the top of the list
  *     TODO: add a navigation drawer housing the rate button, go-premium button, about us button, and settings button
  *       TODO: currently database is cleared when version is updgraded change this for future updates to the app
  *
@@ -55,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_ITEM_VIEW = 2;
     private static final int REQUEST_CODE_ADD = 3;
     private LinearLayoutManager layoutManager;
+    private ExpandableFab expandableFab;
 
 
     @Override
@@ -65,9 +63,10 @@ public class MainActivity extends AppCompatActivity {
 
 
         setUpViewModel();
-        FloatingActionButton addScholarshipbutton = findViewById(R.id.expandable_fab_base);
-
-        addScholarshipbutton.setOnClickListener(view -> {
+        expandableFab = findViewById(R.id.expandable_fab_base);
+//        Adjust fab margins based on device dpi
+        adjustExpandableFabMargins(getDensityName(this));
+        expandableFab.setOnClickListener(view -> {
 
 
         });
@@ -243,6 +242,65 @@ public class MainActivity extends AppCompatActivity {
     public void addScholarship(View view) {
         Intent intent = new Intent(MainActivity.this, AddScholarshipActivity.class);
         startActivityForResult(intent, REQUEST_CODE_ADD);
+    }
+
+    /*
+     * Helper method to get the dpi so that I can alter the expandableFAB button margins
+     * */
+    private static String getDensityName(Context context) {
+        float density = context.getResources().getDisplayMetrics().density;
+        if (density >= 4.0) {
+            return "xxxhdpi";
+        }
+        if (density >= 3.0) {
+            return "xxhdpi";
+        }
+        if (density >= 2.0) {
+            return "xhdpi";
+        }
+        if (density >= 1.5) {
+            return "hdpi";
+        }
+        if (density >= 1.0) {
+            return "mdpi";
+        }
+        return "ldpi";
+    }
+
+    /*
+     * Helper method to adjust expandable fab margins based on pixel density since the library
+     * uses Px and not DP!
+     * */
+    private void adjustExpandableFabMargins(String deviceDPI) {
+        switch (deviceDPI) {
+            case ("xxxhdpi"):
+                expandableFab.setFirstFabOptionMarginPx(200);
+                expandableFab.setSuccessiveFabOptionMarginPx(200);
+                break;
+            case ("xxhdpi"):
+                expandableFab.setSuccessiveFabOptionMarginPx(150);
+                expandableFab.setFirstFabOptionMarginPx(150);
+                break;
+            case ("xhdpi"):
+                expandableFab.setFirstFabOptionMarginPx(100);
+                expandableFab.setSuccessiveFabOptionMarginPx(100);
+                break;
+            case ("hdpi"):
+                expandableFab.setFirstFabOptionMarginPx(75);
+                expandableFab.setSuccessiveFabOptionMarginPx(75);
+                break;
+            case ("mdpi"):
+                expandableFab.setFirstFabOptionMarginPx(50);
+                expandableFab.setSuccessiveFabOptionMarginPx(50);
+                break;
+            case ("ldpi"):
+                expandableFab.setFirstFabOptionMarginPx(37);
+                expandableFab.setSuccessiveFabOptionMarginPx(37);
+                break;
+            default:
+                expandableFab.setFirstFabOptionMarginPx(80);
+                expandableFab.setSuccessiveFabOptionMarginPx(75);
+        }
     }
 }
 
