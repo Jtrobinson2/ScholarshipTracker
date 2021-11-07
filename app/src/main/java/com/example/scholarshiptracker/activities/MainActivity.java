@@ -24,6 +24,8 @@ import com.example.scholarshiptracker.database.Scholarship;
 import com.example.scholarshiptracker.viewmodels.ScholarshipViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import de.mateware.snacky.Snacky;
+
 /*
  *   TODO: make the detail activity look good
  *    TODO: Add actions to all fab options
@@ -67,10 +69,7 @@ public class MainActivity extends AppCompatActivity {
         setUpViewModel();
         FloatingActionButton addScholarshipbutton = findViewById(R.id.expandable_fab_base);
 
-        addScholarshipbutton.setOnClickListener(view -> {
 
-
-        });
 
 
     }
@@ -229,6 +228,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void addScholarshipMoney(View view) {
+        double totalEarned = 0.00;
+        for(int i = 0; i < scholarshipViewModel.getAllScholarships().getValue().size(); i++) {
+            totalEarned += scholarshipViewModel.getAllScholarships().getValue().get(i).getAmount();
+        }
+        Snacky.builder().setActivity(this).setText("Total Amount: " + totalEarned).setBackgroundColor(this.getResources().getColor(R.color.colorPrimary)).setTextColor(this.getResources().getColor(R.color.colorAccent)).build().show();
+
     }
 
     public void orderByDate(View view) {
