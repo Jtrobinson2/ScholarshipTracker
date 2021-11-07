@@ -1,5 +1,6 @@
 package com.example.scholarshiptracker.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -70,6 +71,8 @@ public class MainActivity extends AppCompatActivity {
         FloatingActionButton addScholarshipbutton = findViewById(R.id.expandable_fab_base);
 
 
+
+        });
 
 
     }
@@ -248,6 +251,65 @@ public class MainActivity extends AppCompatActivity {
     public void addScholarship(View view) {
         Intent intent = new Intent(MainActivity.this, AddScholarshipActivity.class);
         startActivityForResult(intent, REQUEST_CODE_ADD);
+    }
+
+    /*
+     * Helper method to get the dpi so that I can alter the expandableFAB button margins
+     * */
+    private static String getDensityName(Context context) {
+        float density = context.getResources().getDisplayMetrics().density;
+        if (density >= 4.0) {
+            return "xxxhdpi";
+        }
+        if (density >= 3.0) {
+            return "xxhdpi";
+        }
+        if (density >= 2.0) {
+            return "xhdpi";
+        }
+        if (density >= 1.5) {
+            return "hdpi";
+        }
+        if (density >= 1.0) {
+            return "mdpi";
+        }
+        return "ldpi";
+    }
+
+    /*
+     * Helper method to adjust expandable fab margins based on pixel density since the library
+     * uses Px and not DP!
+     * */
+    private void adjustExpandableFabMargins(String deviceDPI) {
+        switch (deviceDPI) {
+            case ("xxxhdpi"):
+                expandableFab.setFirstFabOptionMarginPx(200);
+                expandableFab.setSuccessiveFabOptionMarginPx(200);
+                break;
+            case ("xxhdpi"):
+                expandableFab.setSuccessiveFabOptionMarginPx(150);
+                expandableFab.setFirstFabOptionMarginPx(150);
+                break;
+            case ("xhdpi"):
+                expandableFab.setFirstFabOptionMarginPx(100);
+                expandableFab.setSuccessiveFabOptionMarginPx(100);
+                break;
+            case ("hdpi"):
+                expandableFab.setFirstFabOptionMarginPx(75);
+                expandableFab.setSuccessiveFabOptionMarginPx(75);
+                break;
+            case ("mdpi"):
+                expandableFab.setFirstFabOptionMarginPx(50);
+                expandableFab.setSuccessiveFabOptionMarginPx(50);
+                break;
+            case ("ldpi"):
+                expandableFab.setFirstFabOptionMarginPx(37);
+                expandableFab.setSuccessiveFabOptionMarginPx(37);
+                break;
+            default:
+                expandableFab.setFirstFabOptionMarginPx(80);
+                expandableFab.setSuccessiveFabOptionMarginPx(75);
+        }
     }
 }
 

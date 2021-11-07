@@ -45,7 +45,6 @@ dependencies {
 
     implementation 'com.github.matecode:Snacky:1.1.6'
     implementation 'com.google.android.material:material:1.2.1'
-    implementation 'com.github.turing-tech:MaterialScrollBar:13.+'
 
 
     implementation 'me.abhinay.input:currency-edittext:1.1'
