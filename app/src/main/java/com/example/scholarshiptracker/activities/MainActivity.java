@@ -15,9 +15,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.versionedparcelable.VersionedParcel;
 
 import com.example.scholarshiptracker.R;
 import com.example.scholarshiptracker.adapters.ScholarshipAdapter;
@@ -26,9 +28,12 @@ import com.example.scholarshiptracker.viewmodels.ScholarshipViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.nambimobile.widgets.efab.ExpandableFab;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -243,12 +248,62 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void orderByDate(View view) {
+        List<String> sortedList;
+        List<Long> epochList;
+
+        //Get the dates of the scholarships and convert them to mili since epoch
+        sortedList = new ArrayList<String>();
+
+        //loop through all the scholarships and get the dates
+        for (int i = 0; i < scholarshipViewModel.getAllScholarships().getValue().size(); i++) {
+            sortedList.add(scholarshipViewModel.getAllScholarships().getValue().get(i).getDateApplied());
+        }
+
+        epochList = new ArrayList<Long>();
+        //Add all the dates to an epoch list
+        for (String date : sortedList) {
+            try {
+                epochList.add(convertDateStringToEpoch(date));
+            } catch (ParseException e) {
+                throw new IllegalArgumentException("Scholarship has invalid date string");
+            }
+        }
+
+        //Now sort the list of dates
+        Collections.sort(epochList, Long::compareTo);
+
+        //convert the sorted list of epoch dates back into there date strings
+        //Add the date strings to the date string list (now in sorted order)
+        for (int i = 0; i < epochList.size(); i++) {
+            sortedList.set(i, convertEpochToDateString(epochList.get(i)));
+        }
+
+        //Now for every date string find the scholarship associated with it and add it to a list
+        // Setup the new array to replace the unsorted tasks array
+        List<Scholarship> sorted = new ArrayList<Scholarship>();
+
+        for (int i = 0; i < sortedList.size(); i++) {
+            for (int j = 0; j < scholarshipViewModel.getAllScholarships().getValue().size(); j++) {
+                if (scholarshipViewModel.getAllScholarships().getValue().get(j).equals(sortedList.get(i))) {
+                    sorted.add(scholarshipViewModel.getAllScholarships().getValue().get(j));
+                }
+            }
+        }
+
+        // Replace the old list of scholarship with the new sorted one
+        for (int i = 0; i < scholarshipViewModel.getAllScholarships().getValue().size(); i++) {
+            scholarshipViewModel.getAllScholarships().getValue().set(i, sorted.get(i));
+        }
+
+        Collections.reverse(scholarshipViewModel.getAllScholarships().getValue());
+        adapter.notifyDataSetChanged();
 
 
     }
 
     /**
      * Orders scholarships in a list by descending order
+     *
      * @param view
      */
     public void orderByAmount(View view) {
@@ -267,25 +322,20 @@ public class MainActivity extends AppCompatActivity {
                 scholarshipViewModel.getAllScholarships().getValue().set(i, sortedList.get(i));
             }
 
-            //Now reverse the list since the recyclerview populates in reverse order
-//            Collections.reverse(scholarshipViewModel.getAllScholarships().getValue());
 
             //notify the adapter of the changes
             adapter.notifyDataSetChanged();
-
 
 
         }
 
         // If the device doesn't have android N we'll have to make a comparator the old fashioned way returns a positive int if this has more than another scholarship
         Comparator<Scholarship> compareByAmount = (thisOne, thatOne) -> {
-            if(thisOne.getAmount() > thatOne.getAmount()) {
+            if (thisOne.getAmount() > thatOne.getAmount()) {
                 return 1;
-            }
-            else if(thisOne.getAmount() < thatOne.getAmount()) {
+            } else if (thisOne.getAmount() < thatOne.getAmount()) {
                 return -1;
-            }
-            else if(thisOne.getAmount() == thatOne.getAmount()) {
+            } else if (thisOne.getAmount() == thatOne.getAmount()) {
                 return 0;
             }
             return 0;
@@ -303,12 +353,8 @@ public class MainActivity extends AppCompatActivity {
             scholarshipViewModel.getAllScholarships().getValue().set(i, sortedList.get(i));
         }
 
-        //Now reverse the list since the recyclerview populates in reverse order
-//        Collections.reverse(scholarshipViewModel.getAllScholarships().getValue());
-
-        //notify the adapter of the changes
+        //notify the adapter of the changes no need to reverse the list, ints when naturally sorted are in ascending order which would be descending in the recyclerview
         adapter.notifyDataSetChanged();
-
 
 
     }
@@ -319,7 +365,7 @@ public class MainActivity extends AppCompatActivity {
 
         Collections.sort(sortedList, Scholarship::compareTo);
 
-        for (int i = scholarshipViewModel.getAllScholarships().getValue().size(); i < 0; i++) {
+        for (int i = 0; i < scholarshipViewModel.getAllScholarships().getValue().size(); i++) {
 
             //set it to the reverse since the recyclerview is inverted
             scholarshipViewModel.getAllScholarships().getValue().set(i, sortedList.get(i));
@@ -394,6 +440,40 @@ public class MainActivity extends AppCompatActivity {
                 expandableFab.setFirstFabOptionMarginPx(80);
                 expandableFab.setSuccessiveFabOptionMarginPx(75);
         }
+    }
+
+    /**
+     * Helper method to convert scholarships mm/dd/yyyy date string to miliseconds epoch for comparison purposes
+     *
+     * @param date mm/dd/yyyy
+     * @return miliseconds since epoch of date string
+     * @throws ParseException for invalid date strings
+     */
+    private Long convertDateStringToEpoch(String date) throws ParseException {
+
+        return new SimpleDateFormat("MM/dd/yyyy").parse(date).getTime();
+
+
+    }
+
+
+    /**
+     * Helper method to convert epoch date to string date
+     *
+     * @param date in milliseconds since epoch you want to convert
+     * @return mm/dd/yyyy representation of date long
+     */
+    private String convertEpochToDateString(Long date) {
+        //Create data in millis
+        Date epochDate = new Date(date);
+        // use correct format ('S' for milliseconds)
+        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+        // format date
+        String formatted = formatter.format(date);
+
+        return formatted;
+
+
     }
 }
 

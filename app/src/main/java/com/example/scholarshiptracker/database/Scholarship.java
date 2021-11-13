@@ -157,7 +157,7 @@ public class Scholarship implements Serializable, Comparable  {
 
     /**
      * Returns a positive int if the scholarhsip is alphabetically
-     * @param scholarship to be compared on alphebetical basis
+     * @param Scholarship to be compared on alphebetical basis
      * @return int > 0 for scholarships greater than this.name, returns 0 if object is not scholarship object or scholarships are alphabetically the same
      */
     @Override
@@ -169,6 +169,8 @@ public class Scholarship implements Serializable, Comparable  {
             } else if (this.getScholarshipName().compareTo(scholarship.getScholarshipName()) == 0) {
                 return 0;
 
+            } else {
+                return 1;
             }
 
         }
