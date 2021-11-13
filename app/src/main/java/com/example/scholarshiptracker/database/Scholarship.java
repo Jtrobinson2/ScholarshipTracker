@@ -10,7 +10,7 @@ import java.io.Serializable;
 
 //Implements serializable so I can pass objects between activities
 @Entity(tableName = "scholarship_table")
-public class Scholarship implements Serializable {
+public class Scholarship implements Serializable, Comparable  {
 
     @PrimaryKey(autoGenerate = true)
     public int scholarshipID;
@@ -152,5 +152,26 @@ public class Scholarship implements Serializable {
 
     public String getOtherNotes() {
         return otherNotes;
+    }
+
+
+    /**
+     * Returns a positive int if the scholarhsip is alphabetically
+     * @param scholarship to be compared on alphebetical basis
+     * @return int > 0 for scholarships greater than this.name, returns 0 if object is not scholarship object or scholarships are alphabetically the same
+     */
+    @Override
+    public int compareTo(Object o) {
+        if(o instanceof Scholarship) {
+            Scholarship scholarship = (Scholarship) o;
+            if(this.getScholarshipName().compareTo(scholarship.getScholarshipName()) < 0) {
+                return -1;
+            } else if (this.getScholarshipName().compareTo(scholarship.getScholarshipName()) == 0) {
+                return 0;
+
+            }
+
+        }
+        return 0;
     }
 }

@@ -24,6 +24,13 @@ import com.example.scholarshiptracker.adapters.ScholarshipAdapter;
 import com.example.scholarshiptracker.database.Scholarship;
 import com.example.scholarshiptracker.viewmodels.ScholarshipViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.nambimobile.widgets.efab.ExpandableFab;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Objects;
 
 import de.mateware.snacky.Snacky;
 
@@ -58,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_ITEM_VIEW = 2;
     private static final int REQUEST_CODE_ADD = 3;
     private LinearLayoutManager layoutManager;
+    private ExpandableFab expandableFab;
 
 
     @Override
@@ -68,11 +76,6 @@ public class MainActivity extends AppCompatActivity {
 
 
         setUpViewModel();
-        FloatingActionButton addScholarshipbutton = findViewById(R.id.expandable_fab_base);
-
-
-
-        });
 
 
     }
@@ -232,7 +235,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void addScholarshipMoney(View view) {
         double totalEarned = 0.00;
-        for(int i = 0; i < scholarshipViewModel.getAllScholarships().getValue().size(); i++) {
+        for (int i = 0; i < scholarshipViewModel.getAllScholarships().getValue().size(); i++) {
             totalEarned += scholarshipViewModel.getAllScholarships().getValue().get(i).getAmount();
         }
         Snacky.builder().setActivity(this).setText("Total Amount: " + totalEarned).setBackgroundColor(this.getResources().getColor(R.color.colorPrimary)).setTextColor(this.getResources().getColor(R.color.colorAccent)).build().show();
@@ -240,13 +243,94 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void orderByDate(View view) {
+
+
     }
 
+    /**
+     * Orders scholarships in a list by descending order
+     * @param view
+     */
     public void orderByAmount(View view) {
+        //Creating a new comparator and comparing on amount this only works in Android N and above
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            Comparator<Scholarship> compareByAmount = Comparator.comparing(Scholarship::getAmount);
+
+            //get all the scholarships avaliable
+            List<Scholarship> sortedList = scholarshipViewModel.getAllScholarships().getValue();
+
+            //Sort them by amound
+            Collections.sort(sortedList, compareByAmount);
+
+            //replace the unsorted list with the new sorted list
+            for (int i = 0; i < scholarshipViewModel.getAllScholarships().getValue().size(); i++) {
+                scholarshipViewModel.getAllScholarships().getValue().set(i, sortedList.get(i));
+            }
+
+            //Now reverse the list since the recyclerview populates in reverse order
+//            Collections.reverse(scholarshipViewModel.getAllScholarships().getValue());
+
+            //notify the adapter of the changes
+            adapter.notifyDataSetChanged();
+
+
+
+        }
+
+        // If the device doesn't have android N we'll have to make a comparator the old fashioned way returns a positive int if this has more than another scholarship
+        Comparator<Scholarship> compareByAmount = (thisOne, thatOne) -> {
+            if(thisOne.getAmount() > thatOne.getAmount()) {
+                return 1;
+            }
+            else if(thisOne.getAmount() < thatOne.getAmount()) {
+                return -1;
+            }
+            else if(thisOne.getAmount() == thatOne.getAmount()) {
+                return 0;
+            }
+            return 0;
+        };
+
+
+        //get all the scholarships avaliable
+        List<Scholarship> sortedList = scholarshipViewModel.getAllScholarships().getValue();
+
+        //Sort them by amound
+        Collections.sort(sortedList, compareByAmount);
+
+        //replace the unsorted list with the new sorted list
+        for (int i = 0; i < scholarshipViewModel.getAllScholarships().getValue().size(); i++) {
+            scholarshipViewModel.getAllScholarships().getValue().set(i, sortedList.get(i));
+        }
+
+        //Now reverse the list since the recyclerview populates in reverse order
+//        Collections.reverse(scholarshipViewModel.getAllScholarships().getValue());
+
+        //notify the adapter of the changes
+        adapter.notifyDataSetChanged();
+
+
+
     }
+
 
     public void orderAlphabetically(View view) {
+        List<Scholarship> sortedList = scholarshipViewModel.getAllScholarships().getValue();
+
+        Collections.sort(sortedList, Scholarship::compareTo);
+
+        for (int i = scholarshipViewModel.getAllScholarships().getValue().size(); i < 0; i++) {
+
+            //set it to the reverse since the recyclerview is inverted
+            scholarshipViewModel.getAllScholarships().getValue().set(i, sortedList.get(i));
+
+
+        }
+
+        Collections.reverse(scholarshipViewModel.getAllScholarships().getValue());
+        adapter.notifyDataSetChanged();
     }
+
 
     public void addScholarship(View view) {
         Intent intent = new Intent(MainActivity.this, AddScholarshipActivity.class);
