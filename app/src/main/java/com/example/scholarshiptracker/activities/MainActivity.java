@@ -72,6 +72,20 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayoutManager layoutManager;
     private ExpandableFab expandableFab;
 
+    /**Boolean that determines how the recyclerview was sorted used for returning to the previous sorted order when leaving and returning the mainactivity */
+    private boolean isSortedAlphabetically;
+
+
+    /**Boolean that determines how the recyclerview was sorted used for returning to the previous sorted order when leaving and returning the mainactivity */
+    private boolean isSortedByAmount;
+
+
+    /**Boolean that determines how the recyclerview was sorted used for returning to the previous sorted order when leaving and returning the mainactivity */
+    private boolean isSortedByDateApplied;
+
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -248,6 +262,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void orderByDate(View view) {
+
+        //Checking how the list was sorted before this method was called to update the flags appropriately
+        if(isSortedAlphabetically || isSortedByAmount) {
+            isSortedAlphabetically = false;
+            isSortedByAmount = false;
+            isSortedByDateApplied = true;
+        }
         List<String> sortedList;
         List<Long> epochList;
 
@@ -284,7 +305,7 @@ public class MainActivity extends AppCompatActivity {
 
         for (int i = 0; i < sortedList.size(); i++) {
             for (int j = 0; j < scholarshipViewModel.getAllScholarships().getValue().size(); j++) {
-                if (scholarshipViewModel.getAllScholarships().getValue().get(j).equals(sortedList.get(i))) {
+                if (scholarshipViewModel.getAllScholarships().getValue().get(j).getDateApplied().equals(sortedList.get(i))) {
                     sorted.add(scholarshipViewModel.getAllScholarships().getValue().get(j));
                 }
             }
@@ -295,7 +316,7 @@ public class MainActivity extends AppCompatActivity {
             scholarshipViewModel.getAllScholarships().getValue().set(i, sorted.get(i));
         }
 
-        Collections.reverse(scholarshipViewModel.getAllScholarships().getValue());
+        //No need to reverse since we wan't to order by most recent first
         adapter.notifyDataSetChanged();
 
 
@@ -307,6 +328,13 @@ public class MainActivity extends AppCompatActivity {
      * @param view
      */
     public void orderByAmount(View view) {
+        //Checking how the list was sorted before this method was called to update the flags appropriately
+        if(isSortedAlphabetically || isSortedByDateApplied) {
+            isSortedAlphabetically = false;
+            isSortedByDateApplied = false;
+            isSortedByAmount = true;
+
+        }
         //Creating a new comparator and comparing on amount this only works in Android N and above
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
             Comparator<Scholarship> compareByAmount = Comparator.comparing(Scholarship::getAmount);
@@ -361,6 +389,13 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void orderAlphabetically(View view) {
+        //Checking how the list was sorted before this method was called to update the flags appropriately
+        if(isSortedByAmount || isSortedByDateApplied) {
+            isSortedByAmount = false;
+            isSortedByDateApplied = false;
+            isSortedAlphabetically = true;
+
+        }
         List<Scholarship> sortedList = scholarshipViewModel.getAllScholarships().getValue();
 
         Collections.sort(sortedList, Scholarship::compareTo);
@@ -467,7 +502,7 @@ public class MainActivity extends AppCompatActivity {
         //Create data in millis
         Date epochDate = new Date(date);
         // use correct format ('S' for milliseconds)
-        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+        SimpleDateFormat formatter = new SimpleDateFormat("MM/d/yyyy");
         // format date
         String formatted = formatter.format(date);
 
