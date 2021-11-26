@@ -46,11 +46,11 @@ public class ScholarshipTest {
     void testScholarshipConstructor() {
         //Test creating a scholarship with null name
         Exception e = assertThrows(IllegalArgumentException.class, () -> scholarship = new Scholarship(null, VALID_AMOUNT, VALID_DATE_APPLIED, VALID_APPLICATION_DEADLINE), "Scholarship with null name was allowed.");
-        assertEquals("Invalid scholarship name. ", e.getMessage());
+        assertEquals("Scholarship needs a name.", e.getMessage());
 
         //Test creating a scholarship with empty name
         e = assertThrows(IllegalArgumentException.class, () -> scholarship = new Scholarship("", VALID_AMOUNT, VALID_DATE_APPLIED, VALID_APPLICATION_DEADLINE), "Scholarship with empty name was allowed.");
-        assertEquals("Scholarship needs a name. ", e.getMessage());
+        assertEquals("Scholarship needs a name.", e.getMessage());
 
         //Test creating a scholarship with 0 amount
         e = assertThrows(IllegalArgumentException.class, () -> scholarship = new Scholarship(VALID_NAME, 0, VALID_DATE_APPLIED, VALID_APPLICATION_DEADLINE), "Scholarship with 0 amount was allowed.");
@@ -170,10 +170,10 @@ public class ScholarshipTest {
     @Test
     void testCompareTo() {
         //Test a scholarship ahead of the default
-        assertTrue(scholarship.compareTo(new Scholarship("Opportunity", VALID_AMOUNT, VALID_DATE_APPLIED, VALID_APPLICATION_DEADLINE)) > 0 );
+        assertTrue(scholarship.compareTo(new Scholarship("Opportunity", VALID_AMOUNT, VALID_DATE_APPLIED, VALID_APPLICATION_DEADLINE)) < 0 );
 
         //Test a scholarship before the default
-        assertTrue(scholarship.compareTo(new Scholarship("Apple", VALID_AMOUNT, VALID_DATE_APPLIED, VALID_APPLICATION_DEADLINE)) < 0 );
+        assertTrue(scholarship.compareTo(new Scholarship("Apple", VALID_AMOUNT, VALID_DATE_APPLIED, VALID_APPLICATION_DEADLINE)) > 0 );
 
         //Test a scholarship equal to the default
         assertTrue(scholarship.compareTo(new Scholarship(VALID_NAME, VALID_AMOUNT, VALID_DATE_APPLIED, VALID_APPLICATION_DEADLINE)) == 0 );
