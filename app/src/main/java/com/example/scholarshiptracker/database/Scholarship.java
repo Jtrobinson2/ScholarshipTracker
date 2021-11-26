@@ -58,12 +58,14 @@ public class Scholarship implements Serializable, Comparable  {
     }
 
     /**
-     * Constructor that takes all possible fields (besides a scholarship ID).
+     * Constructor that takes all possible fields for a scholarship besides the ID.
      * @param scholarshipName of scholarship
      * @param amount of scholarship
      * @param dateApplied of scholarship
      * @param applicationDeadline of scholarship
-     *
+     * @param expectedResponseDate of scholarship
+     * @param contactInfo of scholarship
+     * @param otherNotes of scholarship
      * @throws IllegalArgumentException for invalid parameters
      */
     public Scholarship(@NonNull String scholarshipName, double amount, @NonNull String dateApplied, @NonNull String applicationDeadline, String expectedResponseDate, String contactInfo, String otherNotes) {
@@ -77,8 +79,18 @@ public class Scholarship implements Serializable, Comparable  {
     }
 
 
-
-    //    This constructor has the ID for update queries
+    /**
+     * Constructor that takes all possible fields for a scholarship
+     * @param scholarshipID of scholarship
+     * @param scholarshipName of scholarship
+     * @param amount of scholarship
+     * @param dateApplied of scholarship
+     * @param applicationDeadline of scholarship
+     * @param expectedResponseDate of scholarship
+     * @param contactInfo of scholarship
+     * @param otherNotes of scholarship
+     * @throws IllegalArgumentException for invalid parameters
+     */
     @Ignore
     public Scholarship(int scholarshipID, @NonNull String scholarshipName, double amount, @NonNull String dateApplied, @NonNull String applicationDeadline, String expectedResponseDate, String contactInfo, String otherNotes) {
         this.scholarshipID  = scholarshipID;
@@ -182,37 +194,69 @@ public class Scholarship implements Serializable, Comparable  {
         }
     }
 
+    /**
+     * Getter for scholarship ID
+     * @return scholarship ID
+     */
     public int getScholarshipID() {
         return scholarshipID;
     }
 
+    /**
+     * Getter for scholarship name
+     * @return scholarship name
+     */
     @NonNull
     public String getScholarshipName() {
         return scholarshipName;
     }
 
+    /**
+     * Getter for scholarship amount
+     * @return scholarship amount
+     */
     public double getAmount() {
         return amount;
     }
 
+    /**
+     * Getter for scholarship date applied
+     * @return date applied
+     */
     @NonNull
     public String getDateApplied() {
         return dateApplied;
     }
 
+    /**
+     * Getter for scholarship application deadline
+     * @return application deadline
+     */
     @NonNull
     public String getApplicationDeadline() {
         return applicationDeadline;
     }
 
+    /**
+     * Getter for scholarship's expected response date
+     * @return expected reponse date
+     */
     public String getExpectedResponseDate() {
         return expectedResponseDate;
     }
 
+    /**
+     * Getter for scholarships contact info
+     * @return contact info
+     */
     public String getContactInfo() {
         return contactInfo;
     }
 
+    /**
+     * Getter for scholarship's other notes
+     * @return otherNotes
+     */
     public String getOtherNotes() {
         return otherNotes;
     }
