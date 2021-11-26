@@ -1,7 +1,5 @@
 package com.example.scholarshiptracker.database;
 
-import android.text.TextPaint;
-
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -12,7 +10,7 @@ import java.io.Serializable;
 
 //Implements serializable so I can pass objects between activities
 @Entity(tableName = "scholarship_table")
-public class Scholarship implements Serializable, Comparable  {
+public class Scholarship implements Serializable, Comparable {
 
     @PrimaryKey(autoGenerate = true)
     public int scholarshipID;
@@ -45,11 +43,11 @@ public class Scholarship implements Serializable, Comparable  {
 
     /**
      * Constructor that takes bare minimum attributes for scholarship
-     * @param scholarshipName of scholarship
-     * @param amount of scholarship
-     * @param dateApplied of scholarship
-     * @param applicationDeadline of scholarship
      *
+     * @param scholarshipName     of scholarship
+     * @param amount              of scholarship
+     * @param dateApplied         of scholarship
+     * @param applicationDeadline of scholarship
      * @throws IllegalArgumentException for invalid paramters
      */
     @Ignore
@@ -59,13 +57,14 @@ public class Scholarship implements Serializable, Comparable  {
 
     /**
      * Constructor that takes all possible fields for a scholarship besides the ID.
-     * @param scholarshipName of scholarship
-     * @param amount of scholarship
-     * @param dateApplied of scholarship
-     * @param applicationDeadline of scholarship
+     *
+     * @param scholarshipName      of scholarship
+     * @param amount               of scholarship
+     * @param dateApplied          of scholarship
+     * @param applicationDeadline  of scholarship
      * @param expectedResponseDate of scholarship
-     * @param contactInfo of scholarship
-     * @param otherNotes of scholarship
+     * @param contactInfo          of scholarship
+     * @param otherNotes           of scholarship
      * @throws IllegalArgumentException for invalid parameters
      */
     public Scholarship(@NonNull String scholarshipName, double amount, @NonNull String dateApplied, @NonNull String applicationDeadline, String expectedResponseDate, String contactInfo, String otherNotes) {
@@ -81,19 +80,20 @@ public class Scholarship implements Serializable, Comparable  {
 
     /**
      * Constructor that takes all possible fields for a scholarship
-     * @param scholarshipID of scholarship
-     * @param scholarshipName of scholarship
-     * @param amount of scholarship
-     * @param dateApplied of scholarship
-     * @param applicationDeadline of scholarship
+     *
+     * @param scholarshipID        of scholarship
+     * @param scholarshipName      of scholarship
+     * @param amount               of scholarship
+     * @param dateApplied          of scholarship
+     * @param applicationDeadline  of scholarship
      * @param expectedResponseDate of scholarship
-     * @param contactInfo of scholarship
-     * @param otherNotes of scholarship
+     * @param contactInfo          of scholarship
+     * @param otherNotes           of scholarship
      * @throws IllegalArgumentException for invalid parameters
      */
     @Ignore
     public Scholarship(int scholarshipID, @NonNull String scholarshipName, double amount, @NonNull String dateApplied, @NonNull String applicationDeadline, String expectedResponseDate, String contactInfo, String otherNotes) {
-        this.scholarshipID  = scholarshipID;
+        this.scholarshipID = scholarshipID;
         setScholarshipName(scholarshipName);
         setAmount(amount);
         setDateApplied(dateApplied);
@@ -106,12 +106,13 @@ public class Scholarship implements Serializable, Comparable  {
 
     /**
      * Setter for application deadline
+     *
      * @param applicationDeadline you want to set
      * @throws IllegalArgumentException for invalid application deadline
      */
     public void setApplicationDeadline(@NonNull String applicationDeadline) {
 
-        if(applicationDeadline == null || applicationDeadline.isEmpty()) {
+        if (applicationDeadline == null || applicationDeadline.isEmpty()) {
             throw new IllegalArgumentException("Deadline is required.");
         }
 
@@ -120,11 +121,12 @@ public class Scholarship implements Serializable, Comparable  {
 
     /**
      * Setter for schlarship name
+     *
      * @param scholarshipName you want to set
      * @throws IllegalArgumentException for invalid scholarship name
      */
     public void setScholarshipName(@NonNull String scholarshipName) {
-        if(scholarshipName == null || scholarshipName.isEmpty()) {
+        if (scholarshipName == null || scholarshipName.isEmpty()) {
             throw new IllegalArgumentException("Scholarship needs a name.");
         }
 
@@ -133,11 +135,12 @@ public class Scholarship implements Serializable, Comparable  {
 
     /**
      * Setter for scholarship amount
+     *
      * @param amount you want the scholarship to have
      * @throws IllegalArgumentException for negative or zero amounts
      */
     public void setAmount(double amount) {
-        if(amount == 0 || amount < 0 ) {
+        if (amount == 0 || amount < 0) {
             throw new IllegalArgumentException("Scholarship needs an amount.");
         }
         this.amount = amount;
@@ -145,11 +148,12 @@ public class Scholarship implements Serializable, Comparable  {
 
     /**
      * Setter for date applied
+     *
      * @param dateApplied of scholarship
      * @throws IllegalArgumentException for invalid dates
      */
     public void setDateApplied(@NonNull String dateApplied) {
-        if(dateApplied == null || dateApplied.isEmpty()) {
+        if (dateApplied == null || dateApplied.isEmpty()) {
             throw new IllegalArgumentException("Date applied is required.");
         }
         this.dateApplied = dateApplied;
@@ -157,10 +161,11 @@ public class Scholarship implements Serializable, Comparable  {
 
     /**
      * Setter for expected response if response is null or empty response is set to N/A
+     *
      * @param expectedResponseDate you want to set
      */
     public void setExpectedResponseDate(String expectedResponseDate) {
-        if(expectedResponseDate == null || expectedResponseDate.isEmpty()) {
+        if (expectedResponseDate == null || expectedResponseDate.isEmpty()) {
             this.expectedResponseDate = "N/A";
         } else {
             this.expectedResponseDate = expectedResponseDate;
@@ -170,10 +175,11 @@ public class Scholarship implements Serializable, Comparable  {
 
     /**
      * Setter for contact info if info is null or empty info is set to N/A
+     *
      * @param contactInfo you want to set
      */
     public void setContactInfo(String contactInfo) {
-        if(contactInfo == null || contactInfo.isEmpty()) {
+        if (contactInfo == null || contactInfo.isEmpty()) {
             this.contactInfo = "N/A";
         } else {
             this.contactInfo = contactInfo;
@@ -184,10 +190,11 @@ public class Scholarship implements Serializable, Comparable  {
 
     /**
      * Setter for scholarships notes if notes is null or empty notes is set to N/A
+     *
      * @param otherNotes you want to set
      */
     public void setOtherNotes(String otherNotes) {
-        if(otherNotes == null || otherNotes.isEmpty()) {
+        if (otherNotes == null || otherNotes.isEmpty()) {
             this.otherNotes = "N/A";
         } else {
             this.otherNotes = otherNotes;
@@ -196,6 +203,7 @@ public class Scholarship implements Serializable, Comparable  {
 
     /**
      * Getter for scholarship ID
+     *
      * @return scholarship ID
      */
     public int getScholarshipID() {
@@ -204,6 +212,7 @@ public class Scholarship implements Serializable, Comparable  {
 
     /**
      * Getter for scholarship name
+     *
      * @return scholarship name
      */
     @NonNull
@@ -213,6 +222,7 @@ public class Scholarship implements Serializable, Comparable  {
 
     /**
      * Getter for scholarship amount
+     *
      * @return scholarship amount
      */
     public double getAmount() {
@@ -221,6 +231,7 @@ public class Scholarship implements Serializable, Comparable  {
 
     /**
      * Getter for scholarship date applied
+     *
      * @return date applied
      */
     @NonNull
@@ -230,6 +241,7 @@ public class Scholarship implements Serializable, Comparable  {
 
     /**
      * Getter for scholarship application deadline
+     *
      * @return application deadline
      */
     @NonNull
@@ -239,6 +251,7 @@ public class Scholarship implements Serializable, Comparable  {
 
     /**
      * Getter for scholarship's expected response date
+     *
      * @return expected reponse date
      */
     public String getExpectedResponseDate() {
@@ -247,6 +260,7 @@ public class Scholarship implements Serializable, Comparable  {
 
     /**
      * Getter for scholarships contact info
+     *
      * @return contact info
      */
     public String getContactInfo() {
@@ -255,6 +269,7 @@ public class Scholarship implements Serializable, Comparable  {
 
     /**
      * Getter for scholarship's other notes
+     *
      * @return otherNotes
      */
     public String getOtherNotes() {
@@ -264,14 +279,15 @@ public class Scholarship implements Serializable, Comparable  {
 
     /**
      * Returns a positive int if the scholarhsip is alphabetically
+     *
      * @param o object to be compared on alphebetical basis
      * @return int > 0 for scholarships greater than this.name, returns 0 if object is not scholarship object or scholarships are alphabetically the same
      */
     @Override
     public int compareTo(Object o) {
-        if(o instanceof Scholarship) {
+        if (o instanceof Scholarship) {
             Scholarship scholarship = (Scholarship) o;
-            if(this.getScholarshipName().compareTo(scholarship.getScholarshipName()) < 0) {
+            if (this.getScholarshipName().compareTo(scholarship.getScholarshipName()) < 0) {
                 return -1;
             } else if (this.getScholarshipName().compareTo(scholarship.getScholarshipName()) == 0) {
                 return 0;

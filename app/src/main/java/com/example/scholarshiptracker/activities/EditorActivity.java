@@ -1,7 +1,5 @@
 package com.example.scholarshiptracker.activities;
 
-import android.app.Activity;
-import android.app.ActivityManager;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -12,7 +10,6 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -34,6 +31,11 @@ import static com.example.scholarshiptracker.activities.AddScholarshipActivity.i
 
 public class EditorActivity extends AppCompatActivity {
 
+    //    Constants used to identify different dialogs and onDateListeners
+    private static final int DATE_PICKER_APPLIED = 0;
+    private static final int DATE_PICKER_DEADLINE = 1;
+    private static final int DATE_PICKER_ANNOUNCE = 2;
+    private static int recievedScholarshipPosition = 0;
     private ScholarshipViewModel viewModel;
     private EditText nameEditText;
     private CurrencyEditText amountEditText;
@@ -45,8 +47,6 @@ public class EditorActivity extends AppCompatActivity {
     private Button submitButton;
     private Context context = this;
     private ImageButton infoButton;
-    private static int recievedScholarshipPosition = 0;
-
     //    Alt-J to select multiple layouts
     private TextInputLayout nameTextInputLayout;
     private TextInputLayout amountTextInputLayout;
@@ -55,16 +55,10 @@ public class EditorActivity extends AppCompatActivity {
     private TextInputLayout announcementTextInputLayout;
     private TextInputLayout contactInfoTextInputLayout;
     private TextInputLayout otherNotesTextInputLayout;
-
     private DatePickerDialog.OnDateSetListener dateAppliedListener;
     private DatePickerDialog.OnDateSetListener deadlineListener;
     private DatePickerDialog.OnDateSetListener announcementListener;
     private Scholarship recievedScholarship;
-
-    //    Constants used to identify different dialogs and onDateListeners
-    private static final int DATE_PICKER_APPLIED = 0;
-    private static final int DATE_PICKER_DEADLINE = 1;
-    private static final int DATE_PICKER_ANNOUNCE = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,7 +109,7 @@ public class EditorActivity extends AppCompatActivity {
             recievedScholarshipPosition = intent.getIntExtra("position", 0);
 
         } else {
-            AddScholarshipActivity.showErrorSnackbar(this);
+            AddScholarshipActivity.showErrorSnackbar(this, "Error");
         }
 
 
@@ -207,47 +201,40 @@ public class EditorActivity extends AppCompatActivity {
 
 
     private void updateScholarship() {
-        String scholarshipName = nameEditText.getText().toString();
-        String dateApplied = dateAppliedEditText.getText().toString();
-        String deadline = deadlineEditText.getText().toString();
-        String announcmentDate = announcementEditText.getText().toString();
-        double amount = 0.00;
-        String contactInfo = contactInfoEditText.getText().toString();
-        String otherNotes = otherNotesEditText.getText().toString();
-
-
-        if (announcementEditText.getText().toString().isEmpty()) {
-            announcmentDate = "N/A";
-        } else {
-            announcmentDate = announcementEditText.getText().toString();
-        }
-        if (contactInfoEditText.getText().toString().isEmpty()) {
-            contactInfo = "N/A";
-        } else {
-            contactInfo = contactInfoEditText.getText().toString();
-        }
-        if (otherNotesEditText.getText().toString().isEmpty()) {
-            otherNotes = "N/A";
-        } else {
-            otherNotes = otherNotesEditText.getText().toString();
-        }
+        String scholarshipName;
+        String dateApplied;
+        String deadline;
+        String announcmentDate;
+        double amount;
+        String contactInfo;
+        String otherNotes;
 
 
         if (!validateScholarshipName() | !validateScholarshipAmount() | !validateDateApplied() | !validateDeadlineEntered()) {
-            AddScholarshipActivity.showErrorSnackbar(EditorActivity.this);
+            AddScholarshipActivity.showErrorSnackbar(EditorActivity.this, "Error");
         } else {
             dateApplied = dateAppliedEditText.getText().toString();
             deadline = deadlineEditText.getText().toString();
             amount = amountEditText.getCleanDoubleValue();
             scholarshipName = nameEditText.getText().toString();
+            announcmentDate = announcementEditText.getText().toString();
+            contactInfo = contactInfoEditText.getText().toString();
+            otherNotes = otherNotesEditText.getText().toString();
 
-            recievedScholarship.setAmount(amount);
-            recievedScholarship.setScholarshipName(scholarshipName);
-            recievedScholarship.setApplicationDeadline(deadline);
-            recievedScholarship.setDateApplied(dateApplied);
-            recievedScholarship.setContactInfo(contactInfo);
-            recievedScholarship.setExpectedResponseDate(announcmentDate);
-            recievedScholarship.setOtherNotes(otherNotes);
+
+            try {
+                recievedScholarship.setAmount(amount);
+                recievedScholarship.setScholarshipName(scholarshipName);
+                recievedScholarship.setApplicationDeadline(deadline);
+                recievedScholarship.setDateApplied(dateApplied);
+                recievedScholarship.setContactInfo(contactInfo);
+                recievedScholarship.setExpectedResponseDate(announcmentDate);
+                recievedScholarship.setOtherNotes(otherNotes);
+
+            } catch (IllegalArgumentException e) {
+                AddScholarshipActivity.showErrorSnackbar(this, e.getMessage());
+            }
+
 
             viewModel.updateScholarship(recievedScholarship);
             Intent intent = new Intent();

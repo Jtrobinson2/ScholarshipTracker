@@ -5,32 +5,26 @@ import com.example.scholarshiptracker.database.Scholarship;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /*
  * Test class for scholarhsip pojo
  */
 public class ScholarshipTest {
+    //Below are string constants to be used to construct valid scholarships
+    private static final double VALID_AMOUNT = 10.00;
+    private static final String VALID_NAME = "Name";
+    private static final String VALID_DATE_APPLIED = "03/18/2002";
+    private static final String VALID_APPLICATION_DEADLINE = "03/18/2002";
+    private static final String VALID_ANNOUNCEMENT_DATE = "03/18/2002";
+    private static final String VALID_CONTACT_INFO = "jmoney@gmail.com";
+    private static final String VALID_OTHER_NOTES = "jmoney@gmail.com";
+    private static final int VALID_SCHOLARSHIP_ID = 1;
     //Scholarship to be re-used in tests
     private Scholarship scholarship;
-
-    //Below are string constants to be used to construct valid scholarships
-    private static final  double VALID_AMOUNT  = 10.00;
-
-    private static final String VALID_NAME = "Name";
-
-    private static final String VALID_DATE_APPLIED = "03/18/2002";
-
-    private static final String VALID_APPLICATION_DEADLINE = "03/18/2002";
-
-    private static final String VALID_ANNOUNCEMENT_DATE  = "03/18/2002";
-
-    private static final String VALID_CONTACT_INFO  = "jmoney@gmail.com";
-
-    private static final String VALID_OTHER_NOTES  = "jmoney@gmail.com";
-
-    private static final int VALID_SCHOLARSHIP_ID = 1;
-
 
     //Setup method for making a fresh scholarship with the minimal data needed in the smallest constructor
     @BeforeEach
@@ -170,12 +164,12 @@ public class ScholarshipTest {
     @Test
     void testCompareTo() {
         //Test a scholarship ahead of the default
-        assertTrue(scholarship.compareTo(new Scholarship("Opportunity", VALID_AMOUNT, VALID_DATE_APPLIED, VALID_APPLICATION_DEADLINE)) < 0 );
+        assertTrue(scholarship.compareTo(new Scholarship("Opportunity", VALID_AMOUNT, VALID_DATE_APPLIED, VALID_APPLICATION_DEADLINE)) < 0);
 
         //Test a scholarship before the default
-        assertTrue(scholarship.compareTo(new Scholarship("Apple", VALID_AMOUNT, VALID_DATE_APPLIED, VALID_APPLICATION_DEADLINE)) > 0 );
+        assertTrue(scholarship.compareTo(new Scholarship("Apple", VALID_AMOUNT, VALID_DATE_APPLIED, VALID_APPLICATION_DEADLINE)) > 0);
 
         //Test a scholarship equal to the default
-        assertTrue(scholarship.compareTo(new Scholarship(VALID_NAME, VALID_AMOUNT, VALID_DATE_APPLIED, VALID_APPLICATION_DEADLINE)) == 0 );
+        assertTrue(scholarship.compareTo(new Scholarship(VALID_NAME, VALID_AMOUNT, VALID_DATE_APPLIED, VALID_APPLICATION_DEADLINE)) == 0);
     }
 }

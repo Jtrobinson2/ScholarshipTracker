@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
-import android.os.SystemClock;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -14,20 +13,16 @@ import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.versionedparcelable.VersionedParcel;
 
 import com.example.scholarshiptracker.R;
 import com.example.scholarshiptracker.adapters.ScholarshipAdapter;
 import com.example.scholarshiptracker.database.Scholarship;
 import com.example.scholarshiptracker.viewmodels.ScholarshipViewModel;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.nambimobile.widgets.efab.ExpandableFab;
 
 import java.text.ParseException;
@@ -37,7 +32,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 import de.mateware.snacky.Snacky;
 
@@ -64,31 +58,55 @@ import de.mateware.snacky.Snacky;
 
 
 public class MainActivity extends AppCompatActivity {
+    private static final int REQUEST_CODE_EDIT = 1;
+    private static final int REQUEST_CODE_ITEM_VIEW = 2;
+    private static final int REQUEST_CODE_ADD = 3;
     private ScholarshipViewModel scholarshipViewModel;
     private ScholarshipAdapter adapter;
     private RecyclerView scholarshipRecyclerView;
-    private static final int REQUEST_CODE_EDIT = 1;
     private Parcelable savedRecyclerViewState;
-    private static final int REQUEST_CODE_ITEM_VIEW = 2;
-    private static final int REQUEST_CODE_ADD = 3;
     private LinearLayoutManager layoutManager;
     private ExpandableFab expandableFab;
-    private Toolbar actionBar;
 
-    /**Boolean that determines how the recyclerview was sorted used for returning to the previous sorted order when leaving and returning the mainactivity */
+    /**
+     * Boolean that determines how the recyclerview was sorted used for returning to the previous sorted order when leaving and returning the mainactivity
+     */
     private boolean isSortedAlphabetically;
 
 
-    /**Boolean that determines how the recyclerview was sorted used for returning to the previous sorted order when leaving and returning the mainactivity */
+    /**
+     * Boolean that determines how the recyclerview was sorted used for returning to the previous sorted order when leaving and returning the mainactivity
+     */
     private boolean isSortedByAmount;
 
 
-    /**Boolean that determines how the recyclerview was sorted used for returning to the previous sorted order when leaving and returning the mainactivity */
+    /**
+     * Boolean that determines how the recyclerview was sorted used for returning to the previous sorted order when leaving and returning the mainactivity
+     */
     private boolean isSortedByDateApplied;
 
-
-
-
+    /*
+     * Helper method to get the dpi so that I can alter the expandableFAB button margins
+     * */
+    private static String getDensityName(Context context) {
+        float density = context.getResources().getDisplayMetrics().density;
+        if (density >= 4.0) {
+            return "xxxhdpi";
+        }
+        if (density >= 3.0) {
+            return "xxhdpi";
+        }
+        if (density >= 2.0) {
+            return "xhdpi";
+        }
+        if (density >= 1.5) {
+            return "hdpi";
+        }
+        if (density >= 1.0) {
+            return "mdpi";
+        }
+        return "ldpi";
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,12 +115,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-
         setUpViewModel();
 
 
     }
-
 
     private void setUpRecyclerView() {
         scholarshipRecyclerView = findViewById(R.id.scholarships_recycler_view);
@@ -144,7 +160,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
     private void setUpViewModel() {
         scholarshipViewModel = ViewModelProviders.of(this).get(ScholarshipViewModel.class);
         scholarshipViewModel.getAllScholarships().observe(this, scholarships -> {
@@ -163,7 +178,6 @@ public class MainActivity extends AppCompatActivity {
         return true;
 
     }
-
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -248,7 +262,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
     //    saving the scroll position so when the user return it doesn't just jump to the bottom of the list
     @Override
     protected void onPause() {
@@ -268,7 +281,7 @@ public class MainActivity extends AppCompatActivity {
     public void orderByDate(View view) {
 
         //Checking how the list was sorted before this method was called to update the flags appropriately
-        if(isSortedAlphabetically || isSortedByAmount) {
+        if (isSortedAlphabetically || isSortedByAmount) {
             isSortedAlphabetically = false;
             isSortedByAmount = false;
             isSortedByDateApplied = true;
@@ -333,7 +346,7 @@ public class MainActivity extends AppCompatActivity {
      */
     public void orderByAmount(View view) {
         //Checking how the list was sorted before this method was called to update the flags appropriately
-        if(isSortedAlphabetically || isSortedByDateApplied) {
+        if (isSortedAlphabetically || isSortedByDateApplied) {
             isSortedAlphabetically = false;
             isSortedByDateApplied = false;
             isSortedByAmount = true;
@@ -391,10 +404,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
     public void orderAlphabetically(View view) {
         //Checking how the list was sorted before this method was called to update the flags appropriately
-        if(isSortedByAmount || isSortedByDateApplied) {
+        if (isSortedByAmount || isSortedByDateApplied) {
             isSortedByAmount = false;
             isSortedByDateApplied = false;
             isSortedAlphabetically = true;
@@ -416,33 +428,9 @@ public class MainActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged();
     }
 
-
     public void addScholarship(View view) {
         Intent intent = new Intent(MainActivity.this, AddScholarshipActivity.class);
         startActivityForResult(intent, REQUEST_CODE_ADD);
-    }
-
-    /*
-     * Helper method to get the dpi so that I can alter the expandableFAB button margins
-     * */
-    private static String getDensityName(Context context) {
-        float density = context.getResources().getDisplayMetrics().density;
-        if (density >= 4.0) {
-            return "xxxhdpi";
-        }
-        if (density >= 3.0) {
-            return "xxhdpi";
-        }
-        if (density >= 2.0) {
-            return "xhdpi";
-        }
-        if (density >= 1.5) {
-            return "hdpi";
-        }
-        if (density >= 1.0) {
-            return "mdpi";
-        }
-        return "ldpi";
     }
 
     /*

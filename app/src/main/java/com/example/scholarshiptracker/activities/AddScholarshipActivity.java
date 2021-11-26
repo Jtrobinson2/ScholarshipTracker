@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.inputmethod.InputMethodManager;
@@ -12,7 +11,6 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -32,6 +30,10 @@ import me.abhinay.input.CurrencySymbols;
 
 public class AddScholarshipActivity extends AppCompatActivity {
 
+    //    Constants used to identify different dialogs and onDateListeners
+    private static final int DATE_PICKER_APPLIED = 0;
+    private static final int DATE_PICKER_DEADLINE = 1;
+    private static final int DATE_PICKER_ANNOUNCE = 2;
     private ScholarshipViewModel viewModel;
     private EditText nameEditText;
     private CurrencyEditText amountEditText;
@@ -42,8 +44,6 @@ public class AddScholarshipActivity extends AppCompatActivity {
     private EditText otherNotesEditText;
     private Button submitButton;
     private ImageButton infoButton;
-
-    //    Alt-J to select multiple layouts
     private TextInputLayout nameTextInputLayout;
     private TextInputLayout amountTextInputLayout;
     private TextInputLayout dateAppliedTextInputLayout;
@@ -51,17 +51,85 @@ public class AddScholarshipActivity extends AppCompatActivity {
     private TextInputLayout announcementTextInputLayout;
     private TextInputLayout contactInfoTextInputLayout;
     private TextInputLayout otherNotesTextInputLayout;
-
-
     private DatePickerDialog.OnDateSetListener dateAppliedListener;
     private DatePickerDialog.OnDateSetListener deadlineListener;
     private DatePickerDialog.OnDateSetListener announcementListener;
 
-    //    Constants used to identify different dialogs and onDateListeners
-    private static final int DATE_PICKER_APPLIED = 0;
-    private static final int DATE_PICKER_DEADLINE = 1;
-    private static final int DATE_PICKER_ANNOUNCE = 2;
+    //  Helper method to determine if a number is positive or an number in the first place
+    public static boolean isPositiveNumber(String input) {
+        try {
+            double integer = Double.parseDouble(input);
+            if (integer <= 0) {
+                return false;
+            } else {
+                return true;
+            }
+        } catch (NumberFormatException ex) {
+            return false;
+        }
 
+
+    }
+
+    public static void showAnnounceInfoDialog(Context context) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setMessage("Announcement date is the day you expect the scholarship to announce the winners");
+        builder.setTitle("Announcement Date");
+        builder.setCancelable(true);
+
+
+        builder.setPositiveButton(
+                "Ok",
+                (dialog, id) -> {
+                    dialog.dismiss();
+
+                });
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+    public static void showErrorSnackbar(Activity activity, String errorMessage) {
+        Snacky.builder()
+                .setActivity(activity)
+                .setText(errorMessage)
+                .setDuration(Snacky.LENGTH_SHORT)
+                .error()
+                .show();
+    }
+
+    public static void showUpdatedSuccessSnackbar(Activity activity) {
+        Snacky.builder()
+                .setActivity(activity)
+                .setText("Update Successful")
+                .setIcon(R.drawable.ic_baseline_check_white_24)
+                .setDuration(Snacky.LENGTH_SHORT)
+                .success()
+                .show();
+
+    }
+
+    public static void showAdditionSuccessSnackbar(Activity activity) {
+        Snacky.builder()
+                .setActivity(activity)
+                .setText("Scholarship Added")
+                .setIcon(R.drawable.ic_baseline_attach_money_white24)
+                .setDuration(Snacky.LENGTH_SHORT)
+                .success()
+                .show();
+
+    }
+
+    public static void showDeletionSnackbar(Activity activity) {
+        Snacky.builder()
+                .setActivity(activity)
+                .setText("Deleted Successfully")
+                .setIcon(R.drawable.ic_baseline_delete_white_24)
+                .setDuration(Snacky.LENGTH_SHORT)
+                .error()
+                .show();
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +142,7 @@ public class AddScholarshipActivity extends AppCompatActivity {
         nameEditText = findViewById(R.id.scholarship_name_edit_text);
 
 
-        amountEditText =  findViewById(R.id.amount_edit_text);
+        amountEditText = findViewById(R.id.amount_edit_text);
 //        This symbol is only for USA users only haven't figured out how to change it dynamically
         amountEditText.setCurrency(CurrencySymbols.USA);
         amountEditText.setSpacing(false);
@@ -198,41 +266,33 @@ public class AddScholarshipActivity extends AppCompatActivity {
         double amount = 0.00;
         String contactInfo = "";
         String otherNotes = "";
+        Scholarship scholarship = null;
 
-
-        if (announcementEditText.getText().toString().isEmpty()) {
-            announcmentDate = "N/A";
-        } else {
-            announcmentDate = announcementEditText.getText().toString();
-        }
-        if (contactInfoEditText.getText().toString().isEmpty()) {
-            contactInfo = "N/A";
-        } else {
-            contactInfo = contactInfoEditText.getText().toString();
-        }
-
-        if (otherNotesEditText.getText().toString().isEmpty()) {
-            otherNotes = "N/A";
-        } else {
-            otherNotes = otherNotesEditText.getText().toString();
-        }
 
         if (!validateScholarshipName() | !validateScholarshipAmount() | !validateDateApplied() | !validateDeadlineEntered()) {
-            showErrorSnackbar(this);
+            showErrorSnackbar(this, "Error");
         } else {
             dateApplied = dateAppliedEditText.getText().toString();
             deadline = deadlineEditText.getText().toString();
             amount = amountEditText.getCleanDoubleValue();
             scholarshipName = nameEditText.getText().toString();
+            announcmentDate = announcementEditText.getText().toString();
+            contactInfo = contactInfoEditText.getText().toString();
+            otherNotes = otherNotesEditText.getText().toString();
 
-            Scholarship scholarship = new Scholarship(scholarshipName, amount, dateApplied, deadline, announcmentDate, contactInfo, otherNotes);
+            //Data should be validated up until this point but invalid data could still throw an exception
+            try {
+                 scholarship = new Scholarship(scholarshipName, amount, dateApplied, deadline, announcmentDate, contactInfo, otherNotes);
+            } catch(IllegalArgumentException e) {
+                showErrorSnackbar(this, e.getMessage());
+            }
+
             viewModel.insertScholarship(scholarship);
             Intent intent = getIntent();
             setResult(RESULT_OK, intent);
             finish();
         }
     }
-
 
     //Helper method to hide the keyboard when clicking on the date picker edit text
     protected void hideSoftKeyboard(EditText input) {
@@ -264,7 +324,6 @@ public class AddScholarshipActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
-
     /*
      * On back pressed returns the recyclerview to the list item you were looking at
      * therefore I want the home button to do the same
@@ -283,22 +342,6 @@ public class AddScholarshipActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         showUnsavedChangedDialog(this);
-    }
-
-    //  Helper method to determine if a number is positive or an number in the first place
-    public static boolean isPositiveNumber(String input) {
-        try {
-            double integer = Double.parseDouble(input);
-            if (integer <= 0) {
-                return false;
-            } else {
-                return true;
-            }
-        } catch (NumberFormatException ex) {
-            return false;
-        }
-
-
     }
 
     //Data validation method for edit texts
@@ -343,7 +386,7 @@ public class AddScholarshipActivity extends AppCompatActivity {
     //Data validation method for edit texts
     private boolean validateDeadlineEntered() {
         if (deadlineEditText.getText().toString().isEmpty()) {
-            deadlineTextInputLayout.setError("Deadline is required");
+            deadlineTextInputLayout.setError("Deadline is required.");
             return false;
         } else {
             deadlineTextInputLayout.setError(null);
@@ -351,65 +394,5 @@ public class AddScholarshipActivity extends AppCompatActivity {
             return true;
 
         }
-    }
-
-    public static void showAnnounceInfoDialog(Context context) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setMessage("Announcement date is the day you expect the scholarship to announce the winners");
-        builder.setTitle("Announcement Date");
-        builder.setCancelable(true);
-
-
-        builder.setPositiveButton(
-                "Ok",
-                (dialog, id) -> {
-                    dialog.dismiss();
-
-                });
-
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
-    }
-
-    public static void showErrorSnackbar(Activity activity) {
-        Snacky.builder()
-                .setActivity(activity)
-                .setText("Error")
-                .setDuration(Snacky.LENGTH_SHORT)
-                .error()
-                .show();
-    }
-
-    public static void showUpdatedSuccessSnackbar(Activity activity) {
-        Snacky.builder()
-                .setActivity(activity)
-                .setText("Update Successful")
-                .setIcon(R.drawable.ic_baseline_check_white_24)
-                .setDuration(Snacky.LENGTH_SHORT)
-                .success()
-                .show();
-
-    }
-
-    public static void showAdditionSuccessSnackbar(Activity activity) {
-        Snacky.builder()
-                .setActivity(activity)
-                .setText("Scholarship Added")
-                .setIcon(R.drawable.ic_baseline_attach_money_white24)
-                .setDuration(Snacky.LENGTH_SHORT)
-                .success()
-                .show();
-
-    }
-
-    public static void showDeletionSnackbar(Activity activity) {
-        Snacky.builder()
-                .setActivity(activity)
-                .setText("Deleted Successfully")
-                .setIcon(R.drawable.ic_baseline_delete_white_24)
-                .setDuration(Snacky.LENGTH_SHORT)
-                .error()
-                .show();
-
     }
 }
