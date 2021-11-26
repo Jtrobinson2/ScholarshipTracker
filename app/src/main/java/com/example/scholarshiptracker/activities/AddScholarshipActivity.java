@@ -131,6 +131,82 @@ public class AddScholarshipActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Validation method for scholarship name edit texts
+     *
+     * @param editText        editText
+     * @param textInputLayout textInputLayout
+     * @return true if the name is valid will show dialog on input text layout if invalid
+     */
+    public static boolean validateScholarshipName(EditText editText, TextInputLayout textInputLayout) {
+        if (editText.getText().toString().isEmpty()) {
+            textInputLayout.setError("Scholarship needs a name");
+            return false;
+        } else {
+            textInputLayout.setError(null);
+            textInputLayout.setErrorEnabled(false);
+            return true;
+        }
+    }
+
+    /**
+     * Validation method for scholarship amount edit texts
+     *
+     * @param editText currency edit text
+     * @param textInputLayout  textInputLayout
+     * @return true if the name is valid will show dialog on input text layout if invalid
+     */
+    public static boolean validateScholarshipAmount(CurrencyEditText editText, TextInputLayout textInputLayout) {
+        if (editText.getText().toString().isEmpty()) {
+            textInputLayout.setError("Scholarship needs an amount");
+            return false;
+        } else if (!isPositiveNumber(String.valueOf(editText.getCleanDoubleValue()))) {
+            textInputLayout.setError("Lets not go into debt here");
+            return false;
+        } else {
+            textInputLayout.setError(null);
+            textInputLayout.setErrorEnabled(false);
+            return true;
+        }
+    }
+
+    /**
+     * Validation method for date applied edit texts
+     *
+     * @param editText        editText
+     * @param textInputLayout textInputLayout
+     * @return true if the name is valid will show dialog on input text layout if invalid
+     */
+    public static boolean validateDateApplied(EditText editText, TextInputLayout textInputLayout) {
+        if (editText.getText().toString().isEmpty()) {
+            textInputLayout.setError("Date applied is required");
+            return false;
+        } else {
+            textInputLayout.setError(null);
+            textInputLayout.setErrorEnabled(false);
+            return true;
+        }
+    }
+
+    /**
+     * Validation method for deadline edit texts
+     *
+     * @param editText        editText
+     * @param textInputLayout textInputLayout
+     * @return true if the name is valid will show dialog on input text layout if invalid
+     */
+    public static boolean validateDeadlineEntered(EditText editText, TextInputLayout textInputLayout) {
+        if (editText.getText().toString().isEmpty()) {
+            textInputLayout.setError("Deadline is required.");
+            return false;
+        } else {
+            textInputLayout.setError(null);
+            textInputLayout.setErrorEnabled(false);
+            return true;
+
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -180,8 +256,7 @@ public class AddScholarshipActivity extends AppCompatActivity {
          * string then shown in the edit text
          * */
         dateAppliedEditText.setOnClickListener(view -> {
-//            hideKeyboard(this);
-            hideSoftKeyboard(dateAppliedEditText);
+            EditorActivity.hideSoftKeyboard(dateAppliedEditText ,this);
             showDatePickerDialog(DATE_PICKER_APPLIED);
         });
 
@@ -196,8 +271,7 @@ public class AddScholarshipActivity extends AppCompatActivity {
 
 
         announcementEditText.setOnClickListener(view -> {
-//            hideKeyboard(this);
-            hideSoftKeyboard(dateAppliedEditText);
+            EditorActivity.hideSoftKeyboard(dateAppliedEditText, this);
             showDatePickerDialog(DATE_PICKER_ANNOUNCE);
         });
 
@@ -207,8 +281,7 @@ public class AddScholarshipActivity extends AppCompatActivity {
         };
 
         deadlineEditText.setOnClickListener(view -> {
-//            hideKeyboard(this);
-            hideSoftKeyboard(dateAppliedEditText);
+            EditorActivity.hideSoftKeyboard(dateAppliedEditText, this);
             showDatePickerDialog(DATE_PICKER_DEADLINE);
         });
 
@@ -269,7 +342,7 @@ public class AddScholarshipActivity extends AppCompatActivity {
         Scholarship scholarship = null;
 
 
-        if (!validateScholarshipName() | !validateScholarshipAmount() | !validateDateApplied() | !validateDeadlineEntered()) {
+        if (!validateScholarshipName(nameEditText, nameTextInputLayout) | !validateScholarshipAmount(amountEditText, amountTextInputLayout) | !validateDateApplied(dateAppliedEditText, dateAppliedTextInputLayout) | !validateDeadlineEntered(deadlineEditText, deadlineTextInputLayout)) {
             showErrorSnackbar(this, "Error");
         } else {
             dateApplied = dateAppliedEditText.getText().toString();
@@ -282,8 +355,8 @@ public class AddScholarshipActivity extends AppCompatActivity {
 
             //Data should be validated up until this point but invalid data could still throw an exception
             try {
-                 scholarship = new Scholarship(scholarshipName, amount, dateApplied, deadline, announcmentDate, contactInfo, otherNotes);
-            } catch(IllegalArgumentException e) {
+                scholarship = new Scholarship(scholarshipName, amount, dateApplied, deadline, announcmentDate, contactInfo, otherNotes);
+            } catch (IllegalArgumentException e) {
                 showErrorSnackbar(this, e.getMessage());
             }
 
@@ -294,11 +367,6 @@ public class AddScholarshipActivity extends AppCompatActivity {
         }
     }
 
-    //Helper method to hide the keyboard when clicking on the date picker edit text
-    protected void hideSoftKeyboard(EditText input) {
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(input.getWindowToken(), 0);
-    }
 
     //    Helper method to show a dialog when the user is about to leave without
 //    finishing editing
@@ -342,57 +410,5 @@ public class AddScholarshipActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         showUnsavedChangedDialog(this);
-    }
-
-    //Data validation method for edit texts
-    private boolean validateScholarshipName() {
-        if (nameEditText.getText().toString().isEmpty()) {
-            nameTextInputLayout.setError("Scholarship needs a name");
-            return false;
-        } else {
-            nameTextInputLayout.setError(null);
-            nameTextInputLayout.setErrorEnabled(false);
-            return true;
-        }
-    }
-
-    //Data validation method for edit texts//Data validation method for edit texts
-    private boolean validateScholarshipAmount() {
-        if (amountEditText.getText().toString().isEmpty()) {
-            amountTextInputLayout.setError("Scholarship needs an amount");
-            return false;
-        } else if (!isPositiveNumber(String.valueOf(amountEditText.getCleanDoubleValue()))) {
-            amountTextInputLayout.setError("Lets not go into debt here");
-            return false;
-        } else {
-            amountTextInputLayout.setError(null);
-            amountTextInputLayout.setErrorEnabled(false);
-            return true;
-        }
-    }
-
-    //Data validation method for edit texts
-    private boolean validateDateApplied() {
-        if (dateAppliedEditText.getText().toString().isEmpty()) {
-            dateAppliedTextInputLayout.setError("Date applied is required");
-            return false;
-        } else {
-            dateAppliedTextInputLayout.setError(null);
-            dateAppliedTextInputLayout.setErrorEnabled(false);
-            return true;
-        }
-    }
-
-    //Data validation method for edit texts
-    private boolean validateDeadlineEntered() {
-        if (deadlineEditText.getText().toString().isEmpty()) {
-            deadlineTextInputLayout.setError("Deadline is required.");
-            return false;
-        } else {
-            deadlineTextInputLayout.setError(null);
-            deadlineTextInputLayout.setErrorEnabled(false);
-            return true;
-
-        }
     }
 }
