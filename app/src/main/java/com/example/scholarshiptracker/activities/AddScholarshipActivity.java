@@ -210,6 +210,7 @@ public class AddScholarshipActivity extends AppCompatActivity {
         } else {
             contactInfo = contactInfoEditText.getText().toString();
         }
+
         if (otherNotesEditText.getText().toString().isEmpty()) {
             otherNotes = "N/A";
         } else {

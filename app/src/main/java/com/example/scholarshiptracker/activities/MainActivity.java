@@ -10,9 +10,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
@@ -71,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_ADD = 3;
     private LinearLayoutManager layoutManager;
     private ExpandableFab expandableFab;
+    private Toolbar actionBar;
 
     /**Boolean that determines how the recyclerview was sorted used for returning to the previous sorted order when leaving and returning the mainactivity */
     private boolean isSortedAlphabetically;
@@ -92,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
         setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
 
         setUpViewModel();
@@ -511,6 +515,5 @@ public class MainActivity extends AppCompatActivity {
 
     }
 }
-
 
 

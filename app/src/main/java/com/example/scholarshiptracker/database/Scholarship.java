@@ -49,23 +49,17 @@ public class Scholarship implements Serializable, Comparable  {
         this.applicationDeadline = applicationDeadline;
     }
 
-    @Ignore
-    public Scholarship(@NonNull String scholarshipName, double amount, @NonNull String dateApplied, @NonNull String applicationDeadline, String expectedResponseDate) {
-        this.scholarshipName = scholarshipName;
-        this.amount = amount;
-        this.dateApplied = dateApplied;
-        this.applicationDeadline = applicationDeadline;
-        this.expectedResponseDate = expectedResponseDate;
-    }
-
-    public Scholarship(@NonNull String scholarshipName, double amount, @NonNull String dateApplied, @NonNull String applicationDeadline, String expectedResponseDate, String contactInfo) {
+    public Scholarship(@NonNull String scholarshipName, double amount, @NonNull String dateApplied, @NonNull String applicationDeadline, String expectedResponseDate, String contactInfo, String otherNotes) {
         this.scholarshipName = scholarshipName;
         this.amount = amount;
         this.dateApplied = dateApplied;
         this.applicationDeadline = applicationDeadline;
         this.expectedResponseDate = expectedResponseDate;
         this.contactInfo = contactInfo;
+        this.otherNotes = otherNotes;
     }
+
+
 
     //    This constructor has the ID for update queries
     @Ignore
@@ -80,16 +74,7 @@ public class Scholarship implements Serializable, Comparable  {
         this.otherNotes = otherNotes;
     }
 
-    @Ignore
-    public Scholarship(@NonNull String scholarshipName, double amount, @NonNull String dateApplied, @NonNull String applicationDeadline, String expectedResponseDate, String contactInfo, String otherNotes) {
-        this.scholarshipName = scholarshipName;
-        this.amount = amount;
-        this.dateApplied = dateApplied;
-        this.applicationDeadline = applicationDeadline;
-        this.expectedResponseDate = expectedResponseDate;
-        this.contactInfo = contactInfo;
-        this.otherNotes = otherNotes;
-    }
+
 
     public void setApplicationDeadline(@NonNull String applicationDeadline) {
         this.applicationDeadline = applicationDeadline;

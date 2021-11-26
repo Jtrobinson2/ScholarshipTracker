@@ -1,23 +1,25 @@
 package com.example.scholarshiptracker.ActivityTests;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
-public class MainActivityTest extends TestCase {
+import static org.junit.Assert.*;
 
+public class MainActivityTest  {
 
-
+    @Test
     public void testAddScholarshipMoney() {
     }
 
+    @Test
     public void testOrderByDate() {
     }
-
+    @Test
     public void testOrderByAmount() {
     }
-
+    @Test
     public void testOrderAlphabetically() {
     }
-
+    @Test
     public void testAddScholarship() {
     }
 }
