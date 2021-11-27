@@ -38,7 +38,6 @@ import de.mateware.snacky.Snacky;
 /*
  *   TODO: make the detail activity look good
  *     TODO: get the proper text sizes use them throughout your app
- *      TODO: add different money icons to list items depending on thier amount
  *       TODO: figure out how you want the list items to look
  *       TODO: Create splashscreen
  *        TODO: Test app
@@ -84,28 +83,7 @@ public class MainActivity extends AppCompatActivity {
      */
     private boolean isSortedByDateApplied;
 
-    /*
-     * Helper method to get the dpi so that I can alter the expandableFAB button margins
-     * */
-    private static String getDensityName(Context context) {
-        float density = context.getResources().getDisplayMetrics().density;
-        if (density >= 4.0) {
-            return "xxxhdpi";
-        }
-        if (density >= 3.0) {
-            return "xxhdpi";
-        }
-        if (density >= 2.0) {
-            return "xhdpi";
-        }
-        if (density >= 1.5) {
-            return "hdpi";
-        }
-        if (density >= 1.0) {
-            return "mdpi";
-        }
-        return "ldpi";
-    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -430,6 +408,29 @@ public class MainActivity extends AppCompatActivity {
     public void addScholarship(View view) {
         Intent intent = new Intent(MainActivity.this, AddScholarshipActivity.class);
         startActivityForResult(intent, REQUEST_CODE_ADD);
+    }
+
+    /*
+     * Helper method to get the dpi so that I can alter the expandableFAB button margins
+     * */
+    private static String getDensityName(Context context) {
+        float density = context.getResources().getDisplayMetrics().density;
+        if (density >= 4.0) {
+            return "xxxhdpi";
+        }
+        if (density >= 3.0) {
+            return "xxhdpi";
+        }
+        if (density >= 2.0) {
+            return "xhdpi";
+        }
+        if (density >= 1.5) {
+            return "hdpi";
+        }
+        if (density >= 1.0) {
+            return "mdpi";
+        }
+        return "ldpi";
     }
 
     /*
