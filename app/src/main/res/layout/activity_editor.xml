@@ -45,8 +45,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:ems="10"
-                android:imeOptions="actionDone"
                 android:hint="Amount"
+                android:imeOptions="actionDone"
                 android:inputType="number" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -101,9 +101,6 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="32dp">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
 
 
                 <EditText
@@ -134,7 +131,6 @@
                     app:layout_constraintVertical_bias="0.0"
                     app:srcCompat="@drawable/ic_outline_info_24" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.textfield.TextInputLayout>
 
 

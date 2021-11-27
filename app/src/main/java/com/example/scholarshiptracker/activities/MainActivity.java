@@ -37,10 +37,9 @@ import de.mateware.snacky.Snacky;
 
 /*
  *   TODO: make the detail activity look good
- *    TODO: Add actions to all fab options
- *     TODO: decrease fab opening and closing animation
  *     TODO: get the proper text sizes use them throughout your app
- *      TODO: Fix cardview layout make them the same size, and look better
+ *      TODO: add different money icons to list items depending on thier amount
+ *       TODO: figure out how you want the list items to look
  *       TODO: Create splashscreen
  *        TODO: Test app
  *         TODO: make spacing even on editor and add activities
@@ -113,8 +112,8 @@ public class MainActivity extends AppCompatActivity {
         setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
+        expandableFab = findViewById(R.id.expandable_fab_base);
+        adjustExpandableFabMargins(getDensityName(this));
         setUpViewModel();
 
 

@@ -94,16 +94,24 @@
         </com.google.android.material.textfield.TextInputLayout>
 
 
+        <ImageButton
+            android:id="@+id/info_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:foreground="?android:attr/selectableItemBackground"
+            app:layout_constraintBottom_toBottomOf="@id/announcement_edit_text"
+            app:layout_constraintLeft_toRightOf="@id/announcement_edit_text"
+            app:layout_constraintTop_toTopOf="@id/announcement_edit_text"
+            app:layout_constraintVertical_bias="0.0"
+            app:srcCompat="@drawable/ic_outline_info_24" />
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/announcement_input_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="32dp">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
 
 
                 <EditText
@@ -122,19 +130,6 @@
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <ImageButton
-                    android:id="@+id/info_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
-                    android:foreground="?android:attr/selectableItemBackground"
-                    app:layout_constraintBottom_toBottomOf="@id/announcement_edit_text"
-                    app:layout_constraintLeft_toRightOf="@id/announcement_edit_text"
-                    app:layout_constraintTop_toTopOf="@id/announcement_edit_text"
-                    app:layout_constraintVertical_bias="0.0"
-                    app:srcCompat="@drawable/ic_outline_info_24" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.textfield.TextInputLayout>
 
 
