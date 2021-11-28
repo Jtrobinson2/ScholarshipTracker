@@ -19,6 +19,7 @@
             android:id="@+id/scholarships_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="?attr/actionBarSize"
             android:fadeScrollbars="true"
             android:scrollbarDefaultDelayBeforeFade="@android:integer/config_mediumAnimTime"
             android:scrollbarSize="5dp"
