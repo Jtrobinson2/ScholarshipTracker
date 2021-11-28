@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<item android:id="@+id/go_premium_menu_item"
+    android:icon="@drawable/ic_info_outline_black_24dp"
+    android:title="Go premium">
+</item>
+
+    <item
+        android:id="@+id/rate_menu_item"
+        android:icon="@drawable/ic_info_outline_black_24dp"
+        android:title="Rate us"/>
+    <item
+        android:id="@+id/about_us_menu_item"
+        android:icon="@drawable/ic_info_outline_black_24dp"
+        android:title="About us"/>
+
+</menu>

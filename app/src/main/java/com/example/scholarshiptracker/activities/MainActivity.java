@@ -9,12 +9,15 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -41,8 +44,6 @@ import de.mateware.snacky.Snacky;
  *       TODO: figure out how you want the list items to look
  *       TODO: Create splashscreen
  *        TODO: Test app
- *         TODO: make spacing even on editor and add activities
- *         TODO: fix announcement date info button placement
  *         TODO: Create app icoon
  *           TODO: make free and paid variants
  *            TODO: Add list item addition, and deletion animations
@@ -65,6 +66,10 @@ public class MainActivity extends AppCompatActivity {
     private Parcelable savedRecyclerViewState;
     private LinearLayoutManager layoutManager;
     private ExpandableFab expandableFab;
+    private DrawerLayout drawerLayout;
+    private Toolbar toolbar;
+    private ActionBarDrawerToggle drawerToggle;
+
 
     /**
      * Boolean that determines how the recyclerview was sorted used for returning to the previous sorted order when leaving and returning the mainactivity
@@ -83,7 +88,28 @@ public class MainActivity extends AppCompatActivity {
      */
     private boolean isSortedByDateApplied;
 
-
+    /*
+     * Helper method to get the dpi so that I can alter the expandableFAB button margins
+     * */
+    private static String getDensityName(Context context) {
+        float density = context.getResources().getDisplayMetrics().density;
+        if (density >= 4.0) {
+            return "xxxhdpi";
+        }
+        if (density >= 3.0) {
+            return "xxhdpi";
+        }
+        if (density >= 2.0) {
+            return "xhdpi";
+        }
+        if (density >= 1.5) {
+            return "hdpi";
+        }
+        if (density >= 1.0) {
+            return "mdpi";
+        }
+        return "ldpi";
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,8 +119,35 @@ public class MainActivity extends AppCompatActivity {
         expandableFab = findViewById(R.id.expandable_fab_base);
         adjustExpandableFabMargins(getDensityName(this));
         setUpViewModel();
+        setUpNavigationDrawer();
 
 
+
+    }
+
+    /**
+     * Helper method to setup the navigation drawer in the main activity
+     */
+    private void setUpNavigationDrawer() {
+        drawerLayout = findViewById(R.id.drawer_layout);
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.material_drawer_open, R.string.material_drawer_open);
+        drawerLayout.addDrawerListener(drawerToggle);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
+
+    }
+
+    /**
+     * Overrode this method to synchronize the navigation drawer icon
+     * @param savedInstanceState of activity
+     */
+    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        drawerToggle.syncState();
     }
 
     private void setUpRecyclerView() {
@@ -160,6 +213,11 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
+
+            case (android.R.id.home):
+                drawerLayout.openDrawer(GravityCompat.START);
+                return true;
+
 
             case R.id.delete_scholarships_menu_item: {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -411,29 +469,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /*
-     * Helper method to get the dpi so that I can alter the expandableFAB button margins
-     * */
-    private static String getDensityName(Context context) {
-        float density = context.getResources().getDisplayMetrics().density;
-        if (density >= 4.0) {
-            return "xxxhdpi";
-        }
-        if (density >= 3.0) {
-            return "xxhdpi";
-        }
-        if (density >= 2.0) {
-            return "xhdpi";
-        }
-        if (density >= 1.5) {
-            return "hdpi";
-        }
-        if (density >= 1.0) {
-            return "mdpi";
-        }
-        return "ldpi";
-    }
-
-    /*
      * Helper method to adjust expandable fab margins based on pixel density since the library
      * uses Px and not DP!
      * */
@@ -500,6 +535,19 @@ public class MainActivity extends AppCompatActivity {
 
         return formatted;
 
+
+    }
+
+    /**
+     * Overriden to handle navigation drawer being closed on back pressed
+     */
+    @Override
+    public void onBackPressed() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
 
     }
 }
