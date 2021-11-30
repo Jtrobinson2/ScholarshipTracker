@@ -95,18 +95,7 @@
 
         </com.nambimobile.widgets.efab.ExpandableFabLayout>
 
-
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?attr/colorPrimary"
-            android:minHeight="?attr/actionBarSize"
-            app:title="@string/app_name"
-            app:titleTextColor="@android:color/white">
-
-        </com.google.android.material.appbar.MaterialToolbar>
-
+        <include layout="@layout/toolbar" />
 
     </FrameLayout>
 

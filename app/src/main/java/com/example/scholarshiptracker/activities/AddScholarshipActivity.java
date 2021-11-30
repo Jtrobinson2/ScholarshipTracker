@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -15,6 +16,7 @@ import android.widget.ImageButton;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.scholarshiptracker.R;
@@ -54,6 +56,7 @@ public class AddScholarshipActivity extends AppCompatActivity {
     private DatePickerDialog.OnDateSetListener dateAppliedListener;
     private DatePickerDialog.OnDateSetListener deadlineListener;
     private DatePickerDialog.OnDateSetListener announcementListener;
+    private Toolbar toolbar;
 
     //  Helper method to determine if a number is positive or an number in the first place
     public static boolean isPositiveNumber(String input) {
@@ -211,6 +214,10 @@ public class AddScholarshipActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_scholarship);
+  //Setup toolbar
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 //        Initializing ViewModel
         viewModel = ViewModelProviders.of(this).get(ScholarshipViewModel.class);

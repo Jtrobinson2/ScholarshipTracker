@@ -3,10 +3,12 @@ package com.example.scholarshiptracker.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.example.scholarshiptracker.R;
 import com.example.scholarshiptracker.database.Scholarship;
@@ -21,8 +23,7 @@ public class DetailActivity extends AppCompatActivity {
     private TextView otherNotesTextView;
     private Scholarship recievedScholarship;
     private static int recievedScholarshipPosition = 0;
-
-
+    private Toolbar toolbar;
 
 
     @Override
@@ -37,6 +38,9 @@ public class DetailActivity extends AppCompatActivity {
         announcementTextView = findViewById(R.id.announcement_text_view);
         contactInfoTextView = findViewById(R.id.contact_info_text_view);
         otherNotesTextView = findViewById(R.id.other_notes_text_view);
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Intent intent = getIntent();
         if (intent.getExtras() != null) {

@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Scholarship Tracker</string>
+    <string name="drawer_open">drawer opened</string>
+    <string name="drawer_close">drawer closed</string>
 </resources>

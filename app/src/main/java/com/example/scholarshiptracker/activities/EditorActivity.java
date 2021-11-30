@@ -14,6 +14,7 @@ import android.widget.ImageButton;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.scholarshiptracker.R;
@@ -59,6 +60,7 @@ public class EditorActivity extends AppCompatActivity {
     private DatePickerDialog.OnDateSetListener deadlineListener;
     private DatePickerDialog.OnDateSetListener announcementListener;
     private Scholarship recievedScholarship;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +91,9 @@ public class EditorActivity extends AppCompatActivity {
         amountTextInputLayout = findViewById(R.id.amount_input_layout);
 
         infoButton = findViewById(R.id.info_button);
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
 //        Initializing ViewModel
